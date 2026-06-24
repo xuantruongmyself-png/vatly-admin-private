@@ -396,18 +396,41 @@
         body.dark { background:#0d1117; color:#e6edf3; }
         body.dark .navbar { background:rgba(13,17,23,0.95); border-color:#30363d; }
         body.dark .nav-logo { color:#e6edf3; }
-        body.dark .card, body.dark .panel, body.dark .tab-content { background:#161b22; border-color:#30363d; }
-        body.dark .tabs { background:#161b22; border-color:#30363d; }
-        body.dark .tab-btn { color:#8b949e; }
-        body.dark .tab-btn.active { color:#0b84f3; border-color:#0b84f3; }
+        body.dark h1, body.dark h2, body.dark h3, body.dark h4 { color:#e6edf3; }
+        body.dark p, body.dark span, body.dark label { color:inherit; }
+        body.dark .section-label, body.dark .sub-label { color:#8b949e; }
+        /* Tabs */
+        body.dark .tabs-nav { background:#161b22; border-color:#30363d; }
+        body.dark .tab-btn { color:#8b949e; border-color:transparent; }
+        body.dark .tab-btn.active { color:#0b84f3; border-color:#0b84f3; background:#0d1117; }
+        /* Cards / panels */
+        body.dark .card, body.dark .panel, body.dark .tab-content, body.dark .section-box { background:#161b22; border-color:#30363d; }
+        body.dark .card-head, body.dark .panel-head { border-color:#30363d; color:#e6edf3; }
+        /* Forms */
         body.dark input, body.dark select, body.dark textarea { background:#0d1117; border-color:#30363d; color:#e6edf3; }
+        body.dark input::placeholder, body.dark textarea::placeholder { color:#6e7681; }
+        /* Tables */
+        body.dark table { border-color:#30363d; }
         body.dark table th { background:#161b22; border-color:#30363d; color:#8b949e; }
-        body.dark table td { border-color:#30363d; }
-        body.dark .nh-row { background:#161b22; border-color:#30363d; }
+        body.dark table td { border-color:#30363d; color:#e6edf3; }
+        body.dark tr:hover td { background:#1c2128; }
+        /* Ngân hàng rows */
+        body.dark .nh-row { background:#161b22; border-color:#30363d; color:#e6edf3; }
         body.dark .nh-row:hover { background:#1c2128; }
-        body.dark .section-label { color:#8b949e; }
-        .theme-toggle { background:none;border:none;cursor:pointer;padding:7px 10px;border-radius:8px;color:var(--gray,#555);font-size:15px;display:inline-flex;align-items:center;transition:color .15s; }
-        .theme-toggle:hover { color:var(--black,#0f0f0f); }
+        body.dark .nh-cell { color:#e6edf3; }
+        body.dark .nh-cell-sub { color:#8b949e; }
+        /* Lịch Live rows */
+        body.dark .ll-row, body.dark .ll-card { background:#161b22; border-color:#30363d; }
+        body.dark .ll-title { color:#e6edf3; }
+        body.dark .ll-meta { color:#8b949e; }
+        /* Đề thi cards */
+        body.dark .exam-row, body.dark .exam-item { background:#161b22; border-color:#30363d; color:#e6edf3; }
+        body.dark .btn-deploy { background:#161b22; border-color:#30363d; color:#e6edf3; }
+        body.dark .em-tag { background:#1c2128; color:#8b949e; }
+        body.dark .badge-mo { background:rgba(22,163,74,.15); color:#4ade80; }
+        body.dark .badge-dong { background:rgba(239,68,68,.12); color:#f87171; }
+        .theme-toggle { background:none;border:none;cursor:pointer;padding:7px 10px;border-radius:8px;color:#555;font-size:15px;display:inline-flex;align-items:center;transition:color .15s; }
+        .theme-toggle:hover { color:#0f0f0f; }
         body.dark .theme-toggle { color:#8b949e; }
         body.dark .theme-toggle:hover { color:#e6edf3; }
     </style>
