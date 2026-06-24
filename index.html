@@ -391,104 +391,6 @@
         .esb-label { font-size:12px; font-weight:700; color:var(--gray); text-transform:uppercase; letter-spacing:.4px; margin-bottom:5px; }
         .esb-select { width:100%; padding:9px 12px; border:1.5px solid var(--border); border-radius:8px; background:var(--bg2); font-size:14px; font-family:'Inter',sans-serif; color:var(--black); outline:none; cursor:pointer; }
         .esb-select:focus { border-color:var(--blue); }
-
-        /* ─── DARK MODE ─── */
-        body.dark { --bg:#0d1117; --bg2:#161b22; --bg3:#21262d; --border:#30363d; --gray:#8b949e; --gray2:#6e7681; background:#0d1117; color:#e6edf3; }
-        body.dark .navbar { background:rgba(13,17,23,0.95); border-color:#30363d; }
-        body.dark .nav-logo { color:#e6edf3; }
-        /* Tab navigation */
-        body.dark .tab-nav, body.dark .tabs-nav { background:#0d1117; border-color:#30363d; }
-        body.dark .tab-btn { color:#8b949e; border-color:transparent; background:transparent; }
-        body.dark .tab-btn:hover { color:#e6edf3; }
-        body.dark .tab-btn.active { color:#0b84f3; border-color:#0b84f3; background:transparent; }
-        /* Filter chips */
-        body.dark .filter-chip { background:#161b22; border-color:#30363d; color:#8b949e; }
-        body.dark .filter-chip.active { background:#e6edf3; color:#0d1117; border-color:#e6edf3; }
-        body.dark .filter-chip:hover { border-color:#8b949e; color:#e6edf3; }
-        /* Lesson list */
-        body.dark .course-block { background:#161b22; border-color:#30363d; }
-        body.dark .course-head:hover { background:#1c2128; }
-        body.dark .course-title { color:#e6edf3; }
-        body.dark .course-meta, body.dark .course-caret { color:#8b949e; }
-        body.dark .chapter-label { background:#0d1117; border-color:#30363d; color:#6e7681; }
-        body.dark .lesson-item { border-color:#30363d; }
-        body.dark .lesson-item:hover { background:#1c2128; }
-        body.dark .li-title { color:#e6edf3; }
-        body.dark .li-sub, body.dark .li-meta { color:#8b949e; }
-        /* Lesson badges */
-        body.dark .li-novid { background:#21262d; color:#6e7681; }
-        body.dark .li-vid { background:rgba(11,132,243,.15); color:#58a6ff; }
-        body.dark .li-quiz { background:rgba(124,58,237,.15); color:#a78bfa; }
-        /* Ngân hàng badges */
-        body.dark .nh-badge.b-tn { background:rgba(30,64,175,.25); color:#93c5fd; }
-        body.dark .nh-badge.b-ds { background:rgba(146,64,14,.25); color:#fcd34d; }
-        body.dark .nh-badge.b-tln { background:rgba(6,95,70,.25); color:#6ee7b7; }
-        body.dark .nh-badge.b-nb { background:rgba(21,128,61,.25); color:#86efac; }
-        body.dark .nh-badge.b-th { background:rgba(29,78,216,.25); color:#93c5fd; }
-        body.dark .nh-badge.b-vd, body.dark .nh-badge.b-vdc { background:rgba(185,28,28,.2); color:#fca5a5; }
-        body.dark .nh-badge.b-nhom { background:rgba(109,40,217,.2); color:#c4b5fd; }
-        body.dark .nh-badge.b-pl { background:rgba(146,64,14,.2); color:#fcd34d; }
-        body.dark .nh-badge.b-ch { background:#21262d; color:#8b949e; border-color:#30363d; }
-        /* Ngân hàng rows */
-        body.dark .nh-row { background:#161b22; border-color:#30363d; color:#e6edf3; }
-        body.dark .nh-row:hover { background:#1c2128; }
-        body.dark .nh-row.selected { background:#1c2128; border-color:#0b84f3; }
-        /* Forms & inputs */
-        body.dark input, body.dark select, body.dark textarea { background:#0d1117; border-color:#30363d; color:#e6edf3; }
-        body.dark input::placeholder, body.dark textarea::placeholder { color:#6e7681; }
-        body.dark .field-input, body.dark .qb-question, body.dark .qb-opt input[type=text] { background:#0d1117; border-color:#30363d; color:#e6edf3; }
-        body.dark .qb-card { background:#161b22; border-color:#30363d; }
-        body.dark .qb-letter { background:#30363d; color:#8b949e; }
-        body.dark .hint-bar { background:#161b22; border-color:#30363d; color:#8b949e; }
-        body.dark .hint-bar strong { color:#e6edf3; }
-        /* Stat boxes */
-        body.dark .stat-val { color:#e6edf3; }
-        body.dark .stat-box, body.dark .stat-card { background:#161b22; border-color:#30363d; }
-        /* Scores table */
-        body.dark .scores-wrap, body.dark .scores-table-wrap { background:#161b22; border-color:#30363d; }
-        body.dark .scores-search input { color:#e6edf3; }
-        body.dark .score-row { border-color:#30363d; color:#e6edf3; }
-        body.dark .score-row:hover { background:#1c2128; }
-        /* Đề thi */
-        body.dark .exam-card, body.dark .exam-item, body.dark .exam-row { background:#161b22; border-color:#30363d; color:#e6edf3; }
-        body.dark .em-tag { background:#21262d; color:#8b949e; border-color:#30363d; }
-        body.dark .em-name, body.dark .em-title { color:#e6edf3; }
-        body.dark .em-meta { color:#8b949e; }
-        body.dark .em-status.khoa { background:#21262d; color:#6e7681; }
-        body.dark .em-status.mo { background:rgba(22,163,74,.15); color:#4ade80; }
-        body.dark .badge-mo { background:rgba(22,163,74,.15); color:#4ade80; }
-        body.dark .badge-dong { background:rgba(239,68,68,.12); color:#f87171; }
-        /* Buttons */
-        body.dark .btn-deploy { background:#161b22; border-color:#30363d; color:#e6edf3; }
-        body.dark .btn-cancel-form, body.dark .btn-browse, body.dark .btn-ghost2 { background:#161b22; border-color:#30363d; color:#e6edf3; }
-        body.dark .btn-cancel-form:hover, body.dark .btn-ghost2:hover { border-color:#8b949e; }
-        /* Lịch Live */
-        body.dark .ll-card { background:#161b22; border-color:#30363d; }
-        body.dark .ll-title { color:#e6edf3; }
-        body.dark .ll-meta, body.dark .ll-desc { color:#8b949e; }
-        body.dark .ll-link-doc { background:rgba(30,64,175,.2); color:#93c5fd; }
-        body.dark .ll-link-yt { background:rgba(185,28,28,.2); color:#fca5a5; }
-        /* Right panel (video preview) */
-        body.dark .lm-right { background:#161b22; border-color:#30363d; }
-        body.dark .lm-right h3, body.dark .lm-right p { color:#8b949e; }
-        /* ESB (soạn đề thi) */
-        body.dark .esb-select { background:#0d1117; border-color:#30363d; color:#e6edf3; }
-        /* Tables */
-        body.dark table { border-color:#30363d; }
-        body.dark table th { background:#161b22; border-color:#30363d; color:#8b949e; }
-        body.dark table td { border-color:#30363d; color:#e6edf3; }
-        body.dark tr:hover td { background:#1c2128; }
-        .theme-toggle { background:none;border:none;cursor:pointer;padding:7px 10px;border-radius:8px;color:#555;font-size:15px;display:inline-flex;align-items:center;transition:color .15s; }
-        .theme-toggle:hover { color:#0f0f0f; }
-        body.dark .theme-toggle { color:#8b949e; }
-        body.dark .theme-toggle:hover { color:#e6edf3; }
-        body.dark .li-btn { border-color:#484f58; color:#8b949e; background:#21262d; }
-        body.dark .li-btn.edit:hover { border-color:#0b84f3; color:#0b84f3; background:rgba(11,132,243,.12); }
-        body.dark .li-btn.del:hover { border-color:#ef4444; color:#ef4444; background:rgba(239,68,68,.12); }
-        body.dark .ch-btn { border-color:#484f58; color:#8b949e; background:#21262d; }
-        body.dark .ch-btn.edit:hover { border-color:#0b84f3; color:#0b84f3; background:rgba(11,132,243,.12); }
-        body.dark .ch-btn.del:hover { border-color:#ef4444; color:#ef4444; background:rgba(239,68,68,.12); }
-
     </style>
 </head>
 <body>
@@ -517,9 +419,8 @@
         Vật Lý Xuân Trường
     </a>
     <div class="nav-right">
-        <button class="theme-toggle" onclick="toggleTheme()" title="Chuyển giao diện sáng/tối"><i class="fa-solid fa-circle-half-stroke"></i></button>
         <span class="sync-badge" id="sync-badge"><i class="fa-solid fa-circle-check"></i> Đã lưu</span>
-        <a href="baihoc.html" target="_blank" class="btn-deploy" style="text-decoration:none">
+        <a href="https://xuantruongmyself-png.github.io/vatly-xuantruong/baihoc.html" target="_blank" class="btn-deploy" style="text-decoration:none">
             <i class="fa-solid fa-eye"></i> Xem Web Học Sinh
         </a>
         <span class="admin-chip"><i class="fa-solid fa-gauge-high"></i> &nbsp;Admin</span>
@@ -1064,36 +965,8 @@
 /* ════════════════════════════════════
    CẤU HÌNH
 ════════════════════════════════════ */
-const ADMIN_PASSWORD_HASH = "e86dccf7a7186a97b495589dcfd51ee224d83ba82f9372a09e912b0065844d57"; // SHA-256 của mật khẩu
+const ADMIN_PASSWORD_HASH = "e5de6384ec4af3d23eb4bed982163b216be90c3ac3b7d531d8b914b0984c9ae5"; // SHA-256 của mật khẩu
 const DB_URL = "https://script.google.com/macros/s/AKfycbyqejp4SzgwNsJb3QrTP76C5-6K2MYqv5T1CzPyi6KUOEEsC7GKQLCnR07i0DNbqKBL/exec";
-
-/* ════ CACHE TỐC ĐỘ — stale-while-revalidate ════ */
-const ADMIN_CACHE_TTL = 5 * 60 * 1000; // 5 phút
-function aCache(key){ try{ const c=JSON.parse(localStorage.getItem(key)); return c||null; }catch{return null;} }
-function aSetCache(key,d){ try{ localStorage.setItem(key,JSON.stringify({t:Date.now(),d})); }catch{} }
-function aFresh(c){ return c && (Date.now()-c.t < ADMIN_CACHE_TTL); }
-
-/* ════════════════════════════════════
-   KHOÁ GHI: tự gắn mật khẩu admin vào mọi thao tác ghi
-════════════════════════════════════ */
-const ADMIN_WRITE_ACTIONS = ['savebaihoc','deletebaihoc','savequestions','savenganhang','deletenganhang','updatenganhang','updatebaihocvideo','saveexam','deleteexam','savelivesession','deletelivesession'];
-function getAdminKey(){ return localStorage.getItem('adminKey') || ''; }
-(function(){
-    const _fetch = window.fetch.bind(window);
-    window.fetch = function(url, opts){
-        try{
-            if(opts && opts.method && String(opts.method).toUpperCase()==='POST'
-               && typeof url==='string' && url.indexOf('script.google.com')!==-1 && opts.body){
-                const b = JSON.parse(opts.body);
-                if(b && b.action && ADMIN_WRITE_ACTIONS.indexOf(String(b.action).toLowerCase())!==-1){
-                    b.adminKey = getAdminKey();
-                    opts = Object.assign({}, opts, { body: JSON.stringify(b) });
-                }
-            }
-        }catch(e){}
-        return _fetch(url, opts);
-    };
-})();
 
 /* ════════════════════════════════════
    LOGIN
@@ -1109,7 +982,6 @@ async function checkLogin(){
     const inputHash = await sha256(document.getElementById('admin-pass').value);
     if(inputHash === ADMIN_PASSWORD_HASH){
         localStorage.setItem('adminLoggedIn','1');
-        localStorage.setItem('adminKey', document.getElementById('admin-pass').value);
         document.getElementById('login-overlay').style.display='none';
         initAdmin();
     } else {
@@ -1117,7 +989,7 @@ async function checkLogin(){
     }
 }
 // Tự động đăng nhập nếu đã có session
-if(localStorage.getItem('adminLoggedIn')==='1' && localStorage.getItem('adminKey')){
+if(localStorage.getItem('adminLoggedIn')==='1'){
     document.getElementById('login-overlay').style.display='none';
     initAdmin();
 }
@@ -1165,20 +1037,11 @@ function switchLiveTab(view){
 }
 
 async function loadLiveSessions(){
-    const CKEY = 'vlxt_admin_lichlive';
-    const cached = aCache(CKEY);
-    if(cached){
-        allLiveSessions = Array.isArray(cached.d) ? cached.d : [];
-        liveLoaded = true; renderLiveList();
-        if(aFresh(cached)) return;
-    } else {
-        document.getElementById('ll-list').innerHTML = '<div class="loading-row"><i class="fa-solid fa-spinner fa-spin" style="color:var(--blue);font-size:22px"></i></div>';
-    }
+    document.getElementById('ll-list').innerHTML = '<div class="loading-row"><i class="fa-solid fa-spinner fa-spin" style="color:var(--blue);font-size:22px"></i></div>';
     try{
-        const r = await fetch(DB_URL + '?type=lichlive');
+        const r = await fetch(DB_URL + '?type=lichlive&t=' + Date.now());
         const data = await r.json();
         allLiveSessions = Array.isArray(data) ? data : [];
-        aSetCache(CKEY, data);
         liveLoaded = true;
     } catch(e) {
         allLiveSessions = [];
@@ -1293,7 +1156,7 @@ async function saveLive(){
 
     const editId = document.getElementById('live-edit-id').value;
     const payload = {
-        action: 'savelivesession',
+        action: 'saveLiveSession',
         id: editId || ('live_' + Date.now()),
         title,
         date,
@@ -1326,7 +1189,7 @@ async function toggleLiveDone(id){
     const s = allLiveSessions.find(x=>x.id===id);
     if(!s) return;
     s.done = !s.done;
-    const payload = { action:'savelivesession', ...s, done: s.done ? '1':'0' };
+    const payload = { action:'saveLiveSession', ...s, done: s.done ? '1':'0' };
     renderLiveList();
     toast(s.done ? '✅ Đã chuyển sang Record' : '🔄 Đã chuyển về Sắp tới','ok');
     try{ await fetch(DB_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)}); }catch(e){}
@@ -1345,7 +1208,7 @@ async function confirmDeleteLive(){
     renderLiveList();
     closeConfirm();
     toast('🗑️ Đã xóa buổi live','ok');
-    try{ await fetch(DB_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'deletelivesession',id:_deleteLiveId})}); }catch(e){}
+    try{ await fetch(DB_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'deleteLiveSession',id:_deleteLiveId})}); }catch(e){}
     _deleteLiveId = null;
 }
 
@@ -1356,23 +1219,15 @@ let allLessons = [];
 let currentFilter = 'all';
 
 async function loadLessons(){
-    const CKEY = 'vlxt_admin_baihoc';
-    const cached = aCache(CKEY);
-    if(cached){
-        allLessons = Array.isArray(cached.d) ? cached.d : (cached.d.baihoc || cached.d.data || []);
-        updateChuongList(); renderLessonList();
-        if(aFresh(cached)) return;
-    } else {
-        document.getElementById('lesson-list-wrap').innerHTML=`<div class="loading-row"><i class="fa-solid fa-spinner fa-spin" style="color:var(--blue);font-size:24px"></i><p style="margin-top:12px;font-size:14px">Đang tải...</p></div>`;
-    }
+    document.getElementById('lesson-list-wrap').innerHTML=`<div class="loading-row"><i class="fa-solid fa-spinner fa-spin" style="color:var(--blue);font-size:24px"></i><p style="margin-top:12px;font-size:14px">Đang tải...</p></div>`;
     try{
-        const r = await fetch(DB_URL + '?type=baihoc');
+        const r = await fetch(DB_URL + '?type=baihoc&t=' + Date.now());
         const data = await r.json();
         allLessons = Array.isArray(data) ? data : (data.baihoc || data.data || []);
-        aSetCache(CKEY, data);
     }catch(e){
-        console.warn('Không kết nối được Sheets:', e);
-        if(!allLessons.length) toast('<i class="fa-solid fa-triangle-exclamation"></i> Chưa kết nối được Google Sheets.', 'err');
+        console.warn('Không kết nối được Sheets, dùng demo:', e);
+        allLessons = [];
+        toast('<i class="fa-solid fa-triangle-exclamation"></i> Chưa kết nối được Google Sheets. Đang hiển thị giao diện trống.', 'err');
     }
     updateChuongList();
     renderLessonList();
@@ -1805,23 +1660,15 @@ async function doDelete(){
 let allScores=[], filteredScores=[];
 
 async function loadScores(){
-    const CKEY = 'vlxt_admin_diemthi';
-    const cached = aCache(CKEY);
-    if(cached){
-        allScores=Array.isArray(cached.d)?cached.d:(cached.d.diemthi||cached.d.bangvang||cached.d.data||[]);
-        filteredScores=[...allScores]; renderStats(); renderScoresTable(filteredScores);
-        if(aFresh(cached)) return;
-    } else {
-        document.getElementById('scores-table-body').innerHTML=`<div class="loading-row"><i class="fa-solid fa-spinner fa-spin" style="color:var(--blue);font-size:22px"></i><p style="margin-top:10px;font-size:14px">Đang tải...</p></div>`;
-    }
+    document.getElementById('scores-table-body').innerHTML=`<div class="loading-row"><i class="fa-solid fa-spinner fa-spin" style="color:var(--blue);font-size:22px"></i><p style="margin-top:10px;font-size:14px">Đang tải...</p></div>`;
     try{
-        const r=await fetch(DB_URL+'?type=diemthi');
+        const r=await fetch(DB_URL+'?type=diemthi&t='+Date.now());
         const data=await r.json();
         allScores=Array.isArray(data)?data:(data.diemthi||data.bangvang||data.data||[]);
-        aSetCache(CKEY, data);
     }catch(e){
         console.warn('Không tải được điểm thi:',e);
-        if(!allScores.length){ allScores=[]; toast('<i class="fa-solid fa-triangle-exclamation"></i> Chưa kết nối được Google Sheets.','err'); }
+        allScores=[];
+        toast('<i class="fa-solid fa-triangle-exclamation"></i> Chưa kết nối được Google Sheets.','err');
     }
     filteredScores=[...allScores];
     renderStats(); renderScoresTable(filteredScores);
@@ -2184,19 +2031,11 @@ function renderPreview2(skipped){
 let examListData = [];
 
 async function loadExamList() {
-    const CKEY = 'vlxt_admin_soande';
-    const cached = aCache(CKEY);
-    if(cached){
-        examListData = cached.d || [];
-        renderExamList(); populateExamSelect();
-        if(aFresh(cached)) return;
-    }
     try {
         const r = await fetch(DB_URL + '?type=danhsachde');
         const j = await r.json();
         examListData = (j.ok && j.data) ? j.data : [];
-        aSetCache(CKEY, examListData);
-    } catch(e) { if(!examListData.length) examListData = []; }
+    } catch(e) { examListData = []; }
     renderExamList();
     populateExamSelect();
 }
@@ -2604,18 +2443,224 @@ async function bankHandleFile(file){
         let html='';
         if(errs.length) html+='<div class="nh-err"><b>'+errs.length+' lỗi cần sửa trong file:</b><br>'+errs.slice(0,8).map(nhEsc).join('<br>')+(errs.length>8?'<br>...':'')+'</div>';
         nhStatus('<i class="fa-solid fa-circle-check"></i> Đọc được <b>'+bankParsed.length+'</b> câu từ '+nhEsc(file.name)+(errs.length?' — <span style="color:var(--red)">có '+errs.length+' lỗi, sửa file rồi thả lại</span>':''));
-        document.getElementById('nh-up-status').insertAdjacentHTML('beforeend', html);
-        document.getElementById('nh-preview-list').innerHTML=bankParsed.map(q=>bankRowHtml(q,false)).join('');
-        nhKatex(document.getElementById('nh-preview-list'));
-        document.getElementById('nh-preview-zone').style.display='';
-    } catch(e){
-        nhStatus('Lỗi đọc file: '+e.message,true);
-    }
+        document.getElementById('nh-up-status').insertAdjacentHTML('beforeend',html);
+        const list=document.getElementById('nh-preview-list');
+        list.innerHTML=bankParsed.map(q=>bankRowHtml(q,false)).join('');
+        document.getElementById('nh-preview-zone').style.display='block';
+        document.getElementById('nh-publish-btn').disabled=errs.length>0;
+        nhKatex(list);
+    }catch(e){ nhStatus('Lỗi đọc file: '+nhEsc(e.message),true); }
 }
-</script>
-<script>
-function toggleTheme(){document.body.classList.toggle('dark');localStorage.setItem('vlxt_theme',document.body.classList.contains('dark')?'dark':'light');}
-if(localStorage.getItem('vlxt_theme')==='dark')document.body.classList.add('dark');
+
+/* ── Nạp vào ngân hàng (chia gói 40 câu) ── */
+async function bankPublish(){
+    if(!bankParsed.length) return;
+    const btn=document.getElementById('nh-publish-btn'); btn.disabled=true;
+    const prog=document.getElementById('nh-progress'), bar=document.getElementById('nh-progress-bar');
+    prog.style.display='block';
+    const CHUNK=40; let done=0;
+    for(let i=0;i<bankParsed.length;i+=CHUNK){
+        const part=bankParsed.slice(i,i+CHUNK);
+        btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Đang nạp '+(done+part.length)+'/'+bankParsed.length+'...';
+        try{
+            await fetch(DB_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'saveNganHang',questions:part})});
+        }catch(e){}
+        done+=part.length; bar.style.width=Math.round(done/bankParsed.length*100)+'%';
+        await new Promise(r=>setTimeout(r,800));
+    }
+    btn.innerHTML='<i class="fa-solid fa-circle-check"></i> Đã nạp '+done+' câu!';
+    toast('<i class="fa-solid fa-circle-check"></i> Đã nạp '+done+' câu vào ngân hàng','ok');
+    setTimeout(()=>{ prog.style.display='none'; bar.style.width='0';
+        document.getElementById('nh-preview-zone').style.display='none';
+        document.getElementById('nh-up-status').innerHTML=''; bankParsed=[]; nhFile.value='';
+        btn.disabled=false; btn.innerHTML='<i class="fa-solid fa-cloud-arrow-up"></i> Nạp vào ngân hàng';
+        loadBank(true);
+    },2200);
+}
+
+/* ════════════════════════════════════
+   NGÂN HÀNG: TẢI ĐỀ .DOCX — TỰ BÓC TÁCH
+   (tái dùng DocxEngine của tab Soạn Đề: tự tách câu, ảnh base64, công thức)
+════════════════════════════════════ */
+let bankDocxQs=[];
+const CHUONG_LIST=['Vật lí nhiệt','Khí lí tưởng','Từ trường','Vật lí hạt nhân'];
+const MUCDO_LIST=[['NB','Nhận biết'],['TH','Thông hiểu'],['VD','Vận dụng'],['VDC','Vận dụng cao']];
+
+function guessChuong(text){
+    const t=(text||'').toLowerCase();
+    if(/hạt nhân|phóng xạ|đồng vị|phân hạch|phản ứng hạt|nơtron|neutron|proton|năng lượng liên kết|chu kỳ bán rã|chu kì bán rã|độ hụt khối|hoạt độ/.test(t)) return 'Vật lí hạt nhân';
+    if(/từ trường|cảm ứng từ|nam châm|dòng điện cảm ứng|suất điện động cảm ứng|từ thông|la bàn|khung dây|lực từ|cuộn dây/.test(t)) return 'Từ trường';
+    if(/khí lí tưởng|khí lý tưởng|áp suất|đẳng tích|đẳng áp|đẳng nhiệt|số mol|mol khí|piston|xilanh|định luật boyle|charles|gay-lussac|thuyết động học/.test(t)) return 'Khí lí tưởng';
+    return 'Vật lí nhiệt';
+}
+
+const nh2Dropzone=document.getElementById('nh2-dropzone');
+const nh2FileInput=document.getElementById('nh2-file-input');
+nh2Dropzone.addEventListener('click',()=>nh2FileInput.click());
+nh2FileInput.addEventListener('change',e=>{if(e.target.files.length)bankDocxHandleFile(e.target.files[0]);});
+['dragenter','dragover'].forEach(ev=>nh2Dropzone.addEventListener(ev,e=>{e.preventDefault();nh2Dropzone.classList.add('dragover');}));
+['dragleave','drop'].forEach(ev=>nh2Dropzone.addEventListener(ev,e=>{e.preventDefault();nh2Dropzone.classList.remove('dragover');}));
+nh2Dropzone.addEventListener('drop',e=>{const f=e.dataTransfer.files[0];if(f)bankDocxHandleFile(f);});
+
+function nh2Status(html,isErr){
+    const s=document.getElementById('nh2-status');
+    s.style.color=isErr?'var(--red)':'var(--blue)';
+    s.innerHTML=html;
+}
+
+async function bankDocxHandleFile(file){
+    document.getElementById('nh2-preview-zone').style.display='none';
+    if(!file.name.toLowerCase().endsWith('.docx')){nh2Status('<i class="fa-solid fa-triangle-exclamation"></i> Chỉ hỗ trợ file <b>.docx</b>',true);return;}
+    if(typeof JSZip==='undefined'){nh2Status('<i class="fa-solid fa-triangle-exclamation"></i> Chưa tải được thư viện. Tải lại trang (F5).',true);return;}
+    nh2Status('<i class="fa-solid fa-spinner fa-spin"></i> Đang đọc & bóc tách file Word...');
+    try{
+        const zip=await JSZip.loadAsync(await file.arrayBuffer());
+        const dF=zip.file("word/document.xml"); if(!dF){nh2Status('<i class="fa-solid fa-bug"></i> File Word không hợp lệ.',true);return;}
+        const dX=await dF.async("string");
+        const rF=zip.file("word/_rels/document.xml.rels");
+        const rX=rF?await rF.async("string"):null;
+        const mM={},mime={png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',gif:'image/gif'};
+        for(const p of Object.keys(zip.files)){if(/^word\/media\//i.test(p)){const ext=p.split('.').pop().toLowerCase();let u=null;if(mime[ext]){const b64=await zip.file(p).async("base64");u='data:'+mime[ext]+';base64,'+b64;}else if(ext==='wmf'){u=wmfToDataUri(await zip.file(p).async("uint8array"));}if(u){if(typeof u!=='object'){u=await compressUri(u);}mM[p.replace(/^.*\//,'')]=u;}}}
+        const parser=new DOMParser();
+        const dD=parser.parseFromString(dX,"application/xml");
+        const rD=rX?parser.parseFromString(rX,"application/xml"):null;
+        let qs=DocxEngine.parse(dD,rD,mM);
+        const total=qs.length;
+        qs=qs.filter(q=>{if(q.type==='mc')return['A','B','C','D'].filter(L=>q.options[L]&&q.options[L].trim()).length>=2;if(q.type==='tf')return['A','B','C','D'].filter(L=>q.options[L]&&q.options[L].trim()).length>=2;if(q.type==='short')return(q.question||'').trim().length>0;return false;});
+        const skipped=total-qs.length;
+        qs.forEach((q,i)=>{q.id=i+1; q.chuong=guessChuong(q.question+' '+(q.options.A||'')+(q.options.B||'')+(q.options.C||'')+(q.options.D||'')); q.mucDo='TH';});
+        bankDocxQs=qs;
+        if(!qs.length){nh2Status('<i class="fa-solid fa-triangle-exclamation"></i> Không tìm thấy câu hỏi. Kiểm tra lại định dạng "Câu 1:", "A.", "a)", "Đáp án:"...',true);return;}
+        nh2Status('<i class="fa-solid fa-circle-check"></i> Đọc được <b>'+qs.length+'</b> câu từ '+esc(file.name)+(skipped?' (bỏ qua '+skipped+' mục không nhận dạng được)':'')+'. Kiểm tra Chương/Mức độ/Đáp án rồi bấm "Nạp vào ngân hàng".');
+        renderBankDocxPreview();
+    }catch(err){console.error(err);nh2Status('<i class="fa-solid fa-bug"></i> Lỗi: '+err.message,true);}
+}
+
+function renderBankDocxPreview(){
+    const wrap=document.getElementById('nh2-preview-zone'),preview=document.getElementById('nh2-preview-list');
+    const chuOpts=CHUONG_LIST.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
+    const mdOpts=MUCDO_LIST.map(([v,t])=>`<option value="${v}">${t}</option>`).join('');
+    let html='';
+    bankDocxQs.forEach((q,idx)=>{
+        html+=`<div class="q-card" data-idx="${idx}"><div class="q-top"><span class="q-num">Câu ${q.id}<span class="q-type-tag t-${q.type}">${TL[q.type]}</span></span><div class="q-text">${q.question}</div></div>`;
+        html+=`<div style="display:flex;gap:8px;margin-bottom:10px">
+            <select class="esb-select" style="flex:1" data-chuong="${idx}">${chuOpts}</select>
+            <select class="esb-select" style="flex:1" data-mucdo="${idx}">${mdOpts}</select>
+        </div>`;
+        if(q.type==='mc'){
+            ['A','B','C','D'].forEach(L=>{const isC=q.correct===L;html+=`<label class="opt-row ${isC?'correct':''}"><input type="radio" name="nh2-mc-${idx}" value="${L}" ${isC?'checked':''}><span class="opt-letter">${L}.</span><span class="opt-body">${q.options[L]||'<i style="color:var(--gray2)">(trống)</i>'}</span></label>`;});
+            if(!q.correct)html+=`<div class="no-correct"><i class="fa-solid fa-circle-exclamation"></i> Chưa nhận diện đáp án — bấm chọn 1 đáp án.</div>`;
+        }else if(q.type==='tf'){
+            ['A','B','C','D'].forEach(L=>{if(!q.options[L])return;const v=(q.correct[{A:0,B:1,C:2,D:3}[L]]||'S');
+                html+=`<div class="tf-row" data-idx="${idx}" data-l="${L}"><span class="tf-letter">${SL[L]}</span><span class="tf-stmt">${q.options[L]}</span><div class="tf-choice"><span class="tf-btn ${v==='Đ'?'sel-d':''}" data-v="Đ">Đúng</span><span class="tf-btn ${v==='S'?'sel-s':''}" data-v="S">Sai</span></div></div>`;});
+        }else if(q.type==='short'){
+            html+=`<div class="short-ans"><i class="fa-solid fa-pen" style="color:var(--green)"></i> Đáp án: <input type="text" maxlength="20" value="${esc(q.correct||'')}" data-short="${idx}"></div>`;
+            if(!q.correct)html+=`<div class="no-correct"><i class="fa-solid fa-circle-exclamation"></i> Chưa có đáp số.</div>`;
+        }
+        html+=`</div>`;
+    });
+    preview.innerHTML=html;
+    preview.querySelectorAll('select[data-chuong]').forEach(sel=>{const idx=+sel.dataset.chuong; sel.value=bankDocxQs[idx].chuong; sel.addEventListener('change',e=>{bankDocxQs[idx].chuong=e.target.value;});});
+    preview.querySelectorAll('select[data-mucdo]').forEach(sel=>{const idx=+sel.dataset.mucdo; sel.value=bankDocxQs[idx].mucDo; sel.addEventListener('change',e=>{bankDocxQs[idx].mucDo=e.target.value;});});
+    preview.querySelectorAll('input[type=radio]').forEach(r=>{r.addEventListener('change',e=>{const idx=parseInt(e.target.name.replace('nh2-mc-',''));bankDocxQs[idx].correct=e.target.value;const card=e.target.closest('.q-card');card.querySelectorAll('.opt-row').forEach(row=>row.classList.remove('correct'));e.target.closest('.opt-row').classList.add('correct');const w=card.querySelector('.no-correct');if(w)w.remove();});});
+    preview.querySelectorAll('.tf-btn').forEach(btn=>{btn.addEventListener('click',()=>{const rw=btn.closest('.tf-row');const idx=+rw.dataset.idx,L=rw.dataset.l,v=btn.dataset.v;const pos={A:0,B:1,C:2,D:3}[L];let arr=(bankDocxQs[idx].correct||'SSSS').split('');while(arr.length<4)arr.push('S');arr[pos]=v;bankDocxQs[idx].correct=arr.join('');rw.querySelectorAll('.tf-btn').forEach(b=>{b.classList.remove('sel-d','sel-s');});btn.classList.add(v==='Đ'?'sel-d':'sel-s');});});
+    preview.querySelectorAll('input[data-short]').forEach(inp=>{inp.addEventListener('input',e=>{const idx=+e.target.dataset.short;bankDocxQs[idx].correct=e.target.value.trim();});});
+    wrap.style.display='block';
+    if(typeof renderMathInElement==='function'){try{renderMathInElement(preview,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});}catch(e){}}
+}
+
+/* ── Nạp các câu đã bóc tách từ .docx vào ngân hàng (gói 40 câu) ── */
+async function bankDocxPublish(){
+    if(!bankDocxQs.length) return;
+    const missing=[];
+    bankDocxQs.forEach(q=>{
+        if(q.type==='mc'&&!q.correct) missing.push('Câu '+q.id);
+        if(q.type==='short'&&!(q.correct||'').toString().trim()) missing.push('Câu '+q.id);
+    });
+    if(missing.length){ toast('<i class="fa-solid fa-triangle-exclamation"></i> Còn '+missing.length+' câu chưa có đáp án ('+missing.slice(0,6).join(', ')+(missing.length>6?'...':'')+')','err'); return; }
+    const items=bankDocxQs.map(q=>({
+        mon:'Vật Lý 12', chuong:q.chuong, mucDo:q.mucDo,
+        loai: q.type==='mc'?'TN':q.type==='tf'?'DS':'TLN',
+        nhomId:'', deBaiChung:'',
+        question:q.question,
+        optA:q.options.A||'', optB:q.options.B||'', optC:q.options.C||'', optD:q.options.D||'',
+        correct:q.correct||'', hinhAnh:'', giaiThich:''
+    }));
+    items.forEach(q=>{ q.phanLoai=classifyTaxonomy(q); });
+    const btn=document.getElementById('nh2-publish-btn'); btn.disabled=true;
+    const prog=document.getElementById('nh2-progress'), bar=document.getElementById('nh2-progress-bar');
+    prog.style.display='block';
+    const CHUNK=40; let done=0;
+    for(let i=0;i<items.length;i+=CHUNK){
+        const part=items.slice(i,i+CHUNK);
+        btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Đang nạp '+(done+part.length)+'/'+items.length+'...';
+        try{
+            await fetch(DB_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'saveNganHang',questions:part})});
+        }catch(e){}
+        done+=part.length; bar.style.width=Math.round(done/items.length*100)+'%';
+        await new Promise(r=>setTimeout(r,800));
+    }
+    btn.innerHTML='<i class="fa-solid fa-circle-check"></i> Đã nạp '+done+' câu!';
+    toast('<i class="fa-solid fa-circle-check"></i> Đã nạp '+done+' câu vào ngân hàng','ok');
+    setTimeout(()=>{ prog.style.display='none'; bar.style.width='0';
+        document.getElementById('nh2-preview-zone').style.display='none';
+        document.getElementById('nh2-status').innerHTML=''; bankDocxQs=[]; nh2FileInput.value='';
+        btn.disabled=false; btn.innerHTML='<i class="fa-solid fa-cloud-arrow-up"></i> Nạp vào ngân hàng';
+        loadBank(true);
+    },2200);
+}
+
+/* ── Tạo đề thi từ câu đã chọn ── */
+function showBankExamForm(){
+    document.getElementById('nh-ef-count').textContent=bankSel.size;
+    document.getElementById('nh-exam-form').style.display='block';
+    document.getElementById('nh-exam-form').scrollIntoView({behavior:'smooth',block:'center'});
+}
+function bankCreateExam(){
+    const examId=document.getElementById('nh-ef-examid').value.trim();
+    const tenDe=document.getElementById('nh-ef-tende').value.trim();
+    if(!examId||!tenDe){ toast('Điền mã đề và tên đề!','err'); return; }
+    if(!bankSel.size){ toast('Chưa chọn câu nào!','err'); return; }
+    const chosen=bankData.filter(q=>bankSel.has(q.id));
+    /* Sắp xếp: TN → DS → TLN, câu cùng nhóm đứng cạnh nhau */
+    const order={TN:0,DS:1,TLN:2};
+    const groups={}; chosen.forEach(q=>{ const g=q.nhomId||('__'+q.id); (groups[g]=groups[g]||[]).push(q); });
+    const sorted=[];
+    Object.values(groups).sort((a,b)=>(order[a[0].loai]||0)-(order[b[0].loai]||0)).forEach(g=>sorted.push(...g));
+    /* Dựng câu hỏi: ghép đề bài chung + ảnh vào nội dung */
+    const typeMap={TN:'mc',DS:'tf',TLN:'short'};
+    const doneCtx=new Set();
+    const questions=sorted.map((q,i)=>{
+        let html=q.question||'';
+        if(q.nhomId&&q.deBaiChung&&!doneCtx.has(q.nhomId)){ html='<div class="q-context">'+q.deBaiChung+'</div>'+html; doneCtx.add(q.nhomId); }
+        else if(!q.nhomId&&q.deBaiChung){ html='<div class="q-context">'+q.deBaiChung+'</div>'+html; }
+        if(q.hinhAnh) html+='<div style="margin-top:10px">'+q.hinhAnh.split(',').map(u=>'<img src="'+driveImg(u.trim())+'" style="max-width:100%;max-height:340px;border-radius:8px;margin:4px 0" loading="lazy">').join('')+'</div>';
+        return { id:i+1, type:typeMap[q.loai]||'mc', question:html,
+                 optA:q.optA||'', optB:q.optB||'', optC:q.optC||'', optD:q.optD||'', correct:q.correct||'' };
+    });
+    const btn=document.getElementById('nh-ef-create-btn');
+    btn.disabled=true; btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Đang tạo đề...';
+    (async ()=>{
+        try{
+            await fetch(DB_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({
+                action:'saveExam', examId, tenDe,
+                moTa:'Tổng hợp từ ngân hàng — '+questions.length+' câu',
+                thoiGian:parseInt(document.getElementById('nh-ef-thoigian').value)||50,
+                trangThai:document.getElementById('nh-ef-trangthai').value,
+                lop:document.getElementById('nh-ef-lop').value })});
+            await new Promise(r=>setTimeout(r,600));
+            await fetch(DB_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({
+                action:'saveQuestions', examId, clearFirst:true, questions })});
+            btn.innerHTML='<i class="fa-solid fa-circle-check"></i> Đã tạo đề '+examId+'!';
+            toast('<i class="fa-solid fa-circle-check"></i> Đề "'+tenDe+'" đã tạo với '+questions.length+' câu! Xem ở tab Soạn đề thi.','ok');
+            setTimeout(()=>{ btn.disabled=false; btn.innerHTML='<i class="fa-solid fa-rocket"></i> Tạo đề & đưa câu hỏi vào';
+                document.getElementById('nh-exam-form').style.display='none'; bankClearSelection(); loadExamList(); },2000);
+        }catch(e){
+            btn.disabled=false; btn.innerHTML='<i class="fa-solid fa-rocket"></i> Tạo đề & đưa câu hỏi vào';
+            toast('Lỗi: '+e.message,'err');
+        }
+    })();
+}
 </script>
 </body>
 </html>
