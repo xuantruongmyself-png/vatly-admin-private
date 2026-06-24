@@ -1156,7 +1156,7 @@ async function saveLive(){
 
     const editId = document.getElementById('live-edit-id').value;
     const payload = {
-        action: 'saveLiveSession',
+        action: 'savelivesession',
         id: editId || ('live_' + Date.now()),
         title,
         date,
@@ -1189,7 +1189,7 @@ async function toggleLiveDone(id){
     const s = allLiveSessions.find(x=>x.id===id);
     if(!s) return;
     s.done = !s.done;
-    const payload = { action:'saveLiveSession', ...s, done: s.done ? '1':'0' };
+    const payload = { action:'savelivesession', ...s, done: s.done ? '1':'0' };
     renderLiveList();
     toast(s.done ? '✅ Đã chuyển sang Record' : '🔄 Đã chuyển về Sắp tới','ok');
     try{ await fetch(DB_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)}); }catch(e){}
@@ -1208,7 +1208,7 @@ async function confirmDeleteLive(){
     renderLiveList();
     closeConfirm();
     toast('🗑️ Đã xóa buổi live','ok');
-    try{ await fetch(DB_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'deleteLiveSession',id:_deleteLiveId})}); }catch(e){}
+    try{ await fetch(DB_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'deletelivesession',id:_deleteLiveId})}); }catch(e){}
     _deleteLiveId = null;
 }
 
