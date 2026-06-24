@@ -391,6 +391,25 @@
         .esb-label { font-size:12px; font-weight:700; color:var(--gray); text-transform:uppercase; letter-spacing:.4px; margin-bottom:5px; }
         .esb-select { width:100%; padding:9px 12px; border:1.5px solid var(--border); border-radius:8px; background:var(--bg2); font-size:14px; font-family:'Inter',sans-serif; color:var(--black); outline:none; cursor:pointer; }
         .esb-select:focus { border-color:var(--blue); }
+
+        /* ─── DARK MODE ─── */
+        body.dark { background:#0d1117; color:#e6edf3; }
+        body.dark .navbar { background:rgba(13,17,23,0.95); border-color:#30363d; }
+        body.dark .nav-logo { color:#e6edf3; }
+        body.dark .card, body.dark .panel, body.dark .tab-content { background:#161b22; border-color:#30363d; }
+        body.dark .tabs { background:#161b22; border-color:#30363d; }
+        body.dark .tab-btn { color:#8b949e; }
+        body.dark .tab-btn.active { color:#0b84f3; border-color:#0b84f3; }
+        body.dark input, body.dark select, body.dark textarea { background:#0d1117; border-color:#30363d; color:#e6edf3; }
+        body.dark table th { background:#161b22; border-color:#30363d; color:#8b949e; }
+        body.dark table td { border-color:#30363d; }
+        body.dark .nh-row { background:#161b22; border-color:#30363d; }
+        body.dark .nh-row:hover { background:#1c2128; }
+        body.dark .section-label { color:#8b949e; }
+        .theme-toggle { background:none;border:none;cursor:pointer;padding:7px 10px;border-radius:8px;color:var(--gray,#555);font-size:15px;display:inline-flex;align-items:center;transition:color .15s; }
+        .theme-toggle:hover { color:var(--black,#0f0f0f); }
+        body.dark .theme-toggle { color:#8b949e; }
+        body.dark .theme-toggle:hover { color:#e6edf3; }
     </style>
 </head>
 <body>
@@ -419,6 +438,7 @@
         Vật Lý Xuân Trường
     </a>
     <div class="nav-right">
+        <button class="theme-toggle" onclick="toggleTheme()" title="Chuyển giao diện sáng/tối"><i class="fa-solid fa-circle-half-stroke"></i></button>
         <span class="sync-badge" id="sync-badge"><i class="fa-solid fa-circle-check"></i> Đã lưu</span>
         <a href="baihoc.html" target="_blank" class="btn-deploy" style="text-decoration:none">
             <i class="fa-solid fa-eye"></i> Xem Web Học Sinh
@@ -2451,6 +2471,10 @@ async function bankHandleFile(file){
         nhStatus('Lỗi đọc file: '+e.message,true);
     }
 }
+</script>
+<script>
+function toggleTheme(){document.body.classList.toggle('dark');localStorage.setItem('vlxt_theme',document.body.classList.contains('dark')?'dark':'light');}
+if(localStorage.getItem('vlxt_theme')==='dark')document.body.classList.add('dark');
 </script>
 </body>
 </html>
