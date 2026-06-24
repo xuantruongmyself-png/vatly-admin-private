@@ -393,42 +393,91 @@
         .esb-select:focus { border-color:var(--blue); }
 
         /* ─── DARK MODE ─── */
-        body.dark { background:#0d1117; color:#e6edf3; }
+        body.dark { --bg:#0d1117; --bg2:#161b22; --bg3:#21262d; --border:#30363d; --gray:#8b949e; --gray2:#6e7681; background:#0d1117; color:#e6edf3; }
         body.dark .navbar { background:rgba(13,17,23,0.95); border-color:#30363d; }
         body.dark .nav-logo { color:#e6edf3; }
-        body.dark h1, body.dark h2, body.dark h3, body.dark h4 { color:#e6edf3; }
-        body.dark p, body.dark span, body.dark label { color:inherit; }
-        body.dark .section-label, body.dark .sub-label { color:#8b949e; }
-        /* Tabs */
-        body.dark .tabs-nav { background:#161b22; border-color:#30363d; }
-        body.dark .tab-btn { color:#8b949e; border-color:transparent; }
-        body.dark .tab-btn.active { color:#0b84f3; border-color:#0b84f3; background:#0d1117; }
-        /* Cards / panels */
-        body.dark .card, body.dark .panel, body.dark .tab-content, body.dark .section-box { background:#161b22; border-color:#30363d; }
-        body.dark .card-head, body.dark .panel-head { border-color:#30363d; color:#e6edf3; }
-        /* Forms */
+        /* Tab navigation */
+        body.dark .tab-nav, body.dark .tabs-nav { background:#0d1117; border-color:#30363d; }
+        body.dark .tab-btn { color:#8b949e; border-color:transparent; background:transparent; }
+        body.dark .tab-btn:hover { color:#e6edf3; }
+        body.dark .tab-btn.active { color:#0b84f3; border-color:#0b84f3; background:transparent; }
+        /* Filter chips */
+        body.dark .filter-chip { background:#161b22; border-color:#30363d; color:#8b949e; }
+        body.dark .filter-chip.active { background:#e6edf3; color:#0d1117; border-color:#e6edf3; }
+        body.dark .filter-chip:hover { border-color:#8b949e; color:#e6edf3; }
+        /* Lesson list */
+        body.dark .course-block { background:#161b22; border-color:#30363d; }
+        body.dark .course-head:hover { background:#1c2128; }
+        body.dark .course-title { color:#e6edf3; }
+        body.dark .course-meta, body.dark .course-caret { color:#8b949e; }
+        body.dark .chapter-label { background:#0d1117; border-color:#30363d; color:#6e7681; }
+        body.dark .lesson-item { border-color:#30363d; }
+        body.dark .lesson-item:hover { background:#1c2128; }
+        body.dark .li-title { color:#e6edf3; }
+        body.dark .li-sub, body.dark .li-meta { color:#8b949e; }
+        /* Lesson badges */
+        body.dark .li-novid { background:#21262d; color:#6e7681; }
+        body.dark .li-vid { background:rgba(11,132,243,.15); color:#58a6ff; }
+        body.dark .li-quiz { background:rgba(124,58,237,.15); color:#a78bfa; }
+        /* Ngân hàng badges */
+        body.dark .nh-badge.b-tn { background:rgba(30,64,175,.25); color:#93c5fd; }
+        body.dark .nh-badge.b-ds { background:rgba(146,64,14,.25); color:#fcd34d; }
+        body.dark .nh-badge.b-tln { background:rgba(6,95,70,.25); color:#6ee7b7; }
+        body.dark .nh-badge.b-nb { background:rgba(21,128,61,.25); color:#86efac; }
+        body.dark .nh-badge.b-th { background:rgba(29,78,216,.25); color:#93c5fd; }
+        body.dark .nh-badge.b-vd, body.dark .nh-badge.b-vdc { background:rgba(185,28,28,.2); color:#fca5a5; }
+        body.dark .nh-badge.b-nhom { background:rgba(109,40,217,.2); color:#c4b5fd; }
+        body.dark .nh-badge.b-pl { background:rgba(146,64,14,.2); color:#fcd34d; }
+        body.dark .nh-badge.b-ch { background:#21262d; color:#8b949e; border-color:#30363d; }
+        /* Ngân hàng rows */
+        body.dark .nh-row { background:#161b22; border-color:#30363d; color:#e6edf3; }
+        body.dark .nh-row:hover { background:#1c2128; }
+        body.dark .nh-row.selected { background:#1c2128; border-color:#0b84f3; }
+        /* Forms & inputs */
         body.dark input, body.dark select, body.dark textarea { background:#0d1117; border-color:#30363d; color:#e6edf3; }
         body.dark input::placeholder, body.dark textarea::placeholder { color:#6e7681; }
+        body.dark .field-input, body.dark .qb-question, body.dark .qb-opt input[type=text] { background:#0d1117; border-color:#30363d; color:#e6edf3; }
+        body.dark .qb-card { background:#161b22; border-color:#30363d; }
+        body.dark .qb-letter { background:#30363d; color:#8b949e; }
+        body.dark .hint-bar { background:#161b22; border-color:#30363d; color:#8b949e; }
+        body.dark .hint-bar strong { color:#e6edf3; }
+        /* Stat boxes */
+        body.dark .stat-val { color:#e6edf3; }
+        body.dark .stat-box, body.dark .stat-card { background:#161b22; border-color:#30363d; }
+        /* Scores table */
+        body.dark .scores-wrap, body.dark .scores-table-wrap { background:#161b22; border-color:#30363d; }
+        body.dark .scores-search input { color:#e6edf3; }
+        body.dark .score-row { border-color:#30363d; color:#e6edf3; }
+        body.dark .score-row:hover { background:#1c2128; }
+        /* Đề thi */
+        body.dark .exam-card, body.dark .exam-item, body.dark .exam-row { background:#161b22; border-color:#30363d; color:#e6edf3; }
+        body.dark .em-tag { background:#21262d; color:#8b949e; border-color:#30363d; }
+        body.dark .em-name, body.dark .em-title { color:#e6edf3; }
+        body.dark .em-meta { color:#8b949e; }
+        body.dark .em-status.khoa { background:#21262d; color:#6e7681; }
+        body.dark .em-status.mo { background:rgba(22,163,74,.15); color:#4ade80; }
+        body.dark .badge-mo { background:rgba(22,163,74,.15); color:#4ade80; }
+        body.dark .badge-dong { background:rgba(239,68,68,.12); color:#f87171; }
+        /* Buttons */
+        body.dark .btn-deploy { background:#161b22; border-color:#30363d; color:#e6edf3; }
+        body.dark .btn-cancel-form, body.dark .btn-browse, body.dark .btn-ghost2 { background:#161b22; border-color:#30363d; color:#e6edf3; }
+        body.dark .btn-cancel-form:hover, body.dark .btn-ghost2:hover { border-color:#8b949e; }
+        /* Lịch Live */
+        body.dark .ll-card { background:#161b22; border-color:#30363d; }
+        body.dark .ll-title { color:#e6edf3; }
+        body.dark .ll-meta, body.dark .ll-desc { color:#8b949e; }
+        body.dark .ll-link-doc { background:rgba(30,64,175,.2); color:#93c5fd; }
+        body.dark .ll-link-yt { background:rgba(185,28,28,.2); color:#fca5a5; }
+        /* Right panel (video preview) */
+        body.dark .lm-right { background:#161b22; border-color:#30363d; }
+        body.dark .lm-right h3, body.dark .lm-right p { color:#8b949e; }
+        /* ESB (soạn đề thi) */
+        body.dark .esb-select { background:#0d1117; border-color:#30363d; color:#e6edf3; }
         /* Tables */
         body.dark table { border-color:#30363d; }
         body.dark table th { background:#161b22; border-color:#30363d; color:#8b949e; }
         body.dark table td { border-color:#30363d; color:#e6edf3; }
         body.dark tr:hover td { background:#1c2128; }
-        /* Ngân hàng rows */
-        body.dark .nh-row { background:#161b22; border-color:#30363d; color:#e6edf3; }
-        body.dark .nh-row:hover { background:#1c2128; }
-        body.dark .nh-cell { color:#e6edf3; }
-        body.dark .nh-cell-sub { color:#8b949e; }
-        /* Lịch Live rows */
-        body.dark .ll-row, body.dark .ll-card { background:#161b22; border-color:#30363d; }
-        body.dark .ll-title { color:#e6edf3; }
-        body.dark .ll-meta { color:#8b949e; }
-        /* Đề thi cards */
-        body.dark .exam-row, body.dark .exam-item { background:#161b22; border-color:#30363d; color:#e6edf3; }
-        body.dark .btn-deploy { background:#161b22; border-color:#30363d; color:#e6edf3; }
-        body.dark .em-tag { background:#1c2128; color:#8b949e; }
-        body.dark .badge-mo { background:rgba(22,163,74,.15); color:#4ade80; }
-        body.dark .badge-dong { background:rgba(239,68,68,.12); color:#f87171; }
         .theme-toggle { background:none;border:none;cursor:pointer;padding:7px 10px;border-radius:8px;color:#555;font-size:15px;display:inline-flex;align-items:center;transition:color .15s; }
         .theme-toggle:hover { color:#0f0f0f; }
         body.dark .theme-toggle { color:#8b949e; }
