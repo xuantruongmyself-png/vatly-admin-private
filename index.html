@@ -2443,4 +2443,14 @@ async function bankHandleFile(file){
         let html='';
         if(errs.length) html+='<div class="nh-err"><b>'+errs.length+' lỗi cần sửa trong file:</b><br>'+errs.slice(0,8).map(nhEsc).join('<br>')+(errs.length>8?'<br>...':'')+'</div>';
         nhStatus('<i class="fa-solid fa-circle-check"></i> Đọc được <b>'+bankParsed.length+'</b> câu từ '+nhEsc(file.name)+(errs.length?' — <span style="color:var(--red)">có '+errs.length+' lỗi, sửa file rồi thả lại</span>':''));
-        document.getElementById('nh-up-status').insertAd
+        document.getElementById('nh-up-status').insertAdjacentHTML('beforeend', html);
+        document.getElementById('nh-preview-list').innerHTML=bankParsed.map(q=>bankRowHtml(q,false)).join('');
+        nhKatex(document.getElementById('nh-preview-list'));
+        document.getElementById('nh-preview-zone').style.display='';
+    } catch(e){
+        nhStatus('Lỗi đọc file: '+e.message,true);
+    }
+}
+</script>
+</body>
+</html>
