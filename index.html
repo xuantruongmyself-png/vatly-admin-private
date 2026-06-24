@@ -1057,8 +1057,30 @@
 /* ════════════════════════════════════
    CẤU HÌNH
 ════════════════════════════════════ */
-const ADMIN_PASSWORD_HASH = "e5de6384ec4af3d23eb4bed982163b216be90c3ac3b7d531d8b914b0984c9ae5"; // SHA-256 của mật khẩu
+const ADMIN_PASSWORD_HASH = "e86dccf7a7186a97b495589dcfd51ee224d83ba82f9372a09e912b0065844d57"; // SHA-256 của mật khẩu
 const DB_URL = "https://script.google.com/macros/s/AKfycbyqejp4SzgwNsJb3QrTP76C5-6K2MYqv5T1CzPyi6KUOEEsC7GKQLCnR07i0DNbqKBL/exec";
+
+/* ════════════════════════════════════
+   KHOÁ GHI: tự gắn mật khẩu admin vào mọi thao tác ghi
+════════════════════════════════════ */
+const ADMIN_WRITE_ACTIONS = ['savebaihoc','deletebaihoc','savequestions','savenganhang','deletenganhang','updatenganhang','updatebaihocvideo','saveexam','deleteexam','savelivesession','deletelivesession'];
+function getAdminKey(){ return localStorage.getItem('adminKey') || ''; }
+(function(){
+    const _fetch = window.fetch.bind(window);
+    window.fetch = function(url, opts){
+        try{
+            if(opts && opts.method && String(opts.method).toUpperCase()==='POST'
+               && typeof url==='string' && url.indexOf('script.google.com')!==-1 && opts.body){
+                const b = JSON.parse(opts.body);
+                if(b && b.action && ADMIN_WRITE_ACTIONS.indexOf(String(b.action).toLowerCase())!==-1){
+                    b.adminKey = getAdminKey();
+                    opts = Object.assign({}, opts, { body: JSON.stringify(b) });
+                }
+            }
+        }catch(e){}
+        return _fetch(url, opts);
+    };
+})();
 
 /* ════════════════════════════════════
    LOGIN
@@ -1074,6 +1096,7 @@ async function checkLogin(){
     const inputHash = await sha256(document.getElementById('admin-pass').value);
     if(inputHash === ADMIN_PASSWORD_HASH){
         localStorage.setItem('adminLoggedIn','1');
+        localStorage.setItem('adminKey', document.getElementById('admin-pass').value);
         document.getElementById('login-overlay').style.display='none';
         initAdmin();
     } else {
@@ -1081,7 +1104,7 @@ async function checkLogin(){
     }
 }
 // Tự động đăng nhập nếu đã có session
-if(localStorage.getItem('adminLoggedIn')==='1'){
+if(localStorage.getItem('adminLoggedIn')==='1' && localStorage.getItem('adminKey')){
     document.getElementById('login-overlay').style.display='none';
     initAdmin();
 }
