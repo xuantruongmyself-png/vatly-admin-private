@@ -490,6 +490,7 @@
         body.dark .ch-btn.del:hover { border-color:#ef4444; color:#ef4444; background:rgba(239,68,68,.12); }
 
     </style>
+  <script src="cache.js"></script>
 </head>
 <body>
 
@@ -519,7 +520,7 @@
     <div class="nav-right">
         <button class="theme-toggle" onclick="toggleTheme()" title="Chuyển giao diện sáng/tối"><i class="fa-solid fa-circle-half-stroke"></i></button>
         <span class="sync-badge" id="sync-badge"><i class="fa-solid fa-circle-check"></i> Đã lưu</span>
-        <a href="https://xuantruongmyself-png.github.io/vatly-xuantruong/baihoc.html" target="_blank" class="btn-deploy" style="text-decoration:none">
+        <a href="baihoc.html" target="_blank" class="btn-deploy" style="text-decoration:none">
             <i class="fa-solid fa-eye"></i> Xem Web Học Sinh
         </a>
         <span class="admin-chip"><i class="fa-solid fa-gauge-high"></i> &nbsp;Admin</span>
@@ -1175,7 +1176,7 @@ async function loadLiveSessions(){
         document.getElementById('ll-list').innerHTML = '<div class="loading-row"><i class="fa-solid fa-spinner fa-spin" style="color:var(--blue);font-size:22px"></i></div>';
     }
     try{
-        const r = await fetch(DB_URL + '?type=lichlive');
+        const r = await cachedFetch(DB_URL + '?type=lichlive');
         const data = await r.json();
         allLiveSessions = Array.isArray(data) ? data : [];
         aSetCache(CKEY, data);
@@ -1366,7 +1367,7 @@ async function loadLessons(){
         document.getElementById('lesson-list-wrap').innerHTML=`<div class="loading-row"><i class="fa-solid fa-spinner fa-spin" style="color:var(--blue);font-size:24px"></i><p style="margin-top:12px;font-size:14px">Đang tải...</p></div>`;
     }
     try{
-        const r = await fetch(DB_URL + '?type=baihoc');
+        const r = await cachedFetch(DB_URL + '?type=baihoc');
         const data = await r.json();
         allLessons = Array.isArray(data) ? data : (data.baihoc || data.data || []);
         aSetCache(CKEY, data);
@@ -1815,7 +1816,7 @@ async function loadScores(){
         document.getElementById('scores-table-body').innerHTML=`<div class="loading-row"><i class="fa-solid fa-spinner fa-spin" style="color:var(--blue);font-size:22px"></i><p style="margin-top:10px;font-size:14px">Đang tải...</p></div>`;
     }
     try{
-        const r=await fetch(DB_URL+'?type=diemthi');
+        const r=await cachedFetch(DB_URL+'?type=diemthi');
         const data=await r.json();
         allScores=Array.isArray(data)?data:(data.diemthi||data.bangvang||data.data||[]);
         aSetCache(CKEY, data);
@@ -2192,7 +2193,7 @@ async function loadExamList() {
         if(aFresh(cached)) return;
     }
     try {
-        const r = await fetch(DB_URL + '?type=danhsachde');
+        const r = await cachedFetch(DB_URL + '?type=danhsachde');
         const j = await r.json();
         examListData = (j.ok && j.data) ? j.data : [];
         aSetCache(CKEY, examListData);
@@ -2400,7 +2401,7 @@ async function loadBank(force){
     const list=document.getElementById('nh-list');
     list.innerHTML='<div class="loading-row" style="padding:40px"><i class="fa-solid fa-spinner fa-spin" style="color:var(--blue);font-size:22px"></i><p style="margin-top:10px;font-size:14px">Đang tải ngân hàng...</p></div>';
     try{
-        const r=await fetch(DB_URL+'?type=nganhang&t='+Date.now());
+        const r=await cachedFetch(DB_URL+'?type=nganhang&t='+Date.now());
         const j=await r.json();
         bankData=(j.data||[]).map(q=>{q={...q, loai:(q.loai||'TN').toString().toUpperCase().trim()}; if(!q.phanLoai) q.phanLoai=classifyTaxonomy(q); return q;});
         bankLoaded=true; bankSel.clear();
