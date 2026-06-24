@@ -482,6 +482,13 @@
         .theme-toggle:hover { color:#0f0f0f; }
         body.dark .theme-toggle { color:#8b949e; }
         body.dark .theme-toggle:hover { color:#e6edf3; }
+        body.dark .li-btn { border-color:#484f58; color:#8b949e; background:#21262d; }
+        body.dark .li-btn.edit:hover { border-color:#0b84f3; color:#0b84f3; background:rgba(11,132,243,.12); }
+        body.dark .li-btn.del:hover { border-color:#ef4444; color:#ef4444; background:rgba(239,68,68,.12); }
+        body.dark .ch-btn { border-color:#484f58; color:#8b949e; background:#21262d; }
+        body.dark .ch-btn.edit:hover { border-color:#0b84f3; color:#0b84f3; background:rgba(11,132,243,.12); }
+        body.dark .ch-btn.del:hover { border-color:#ef4444; color:#ef4444; background:rgba(239,68,68,.12); }
+
     </style>
 </head>
 <body>
@@ -1060,6 +1067,12 @@
 const ADMIN_PASSWORD_HASH = "e86dccf7a7186a97b495589dcfd51ee224d83ba82f9372a09e912b0065844d57"; // SHA-256 của mật khẩu
 const DB_URL = "https://script.google.com/macros/s/AKfycbyqejp4SzgwNsJb3QrTP76C5-6K2MYqv5T1CzPyi6KUOEEsC7GKQLCnR07i0DNbqKBL/exec";
 
+/* ════ CACHE TỐC ĐỘ — stale-while-revalidate ════ */
+const ADMIN_CACHE_TTL = 5 * 60 * 1000; // 5 phút
+function aCache(key){ try{ const c=JSON.parse(localStorage.getItem(key)); return c||null; }catch{return null;} }
+function aSetCache(key,d){ try{ localStorage.setItem(key,JSON.stringify({t:Date.now(),d})); }catch{} }
+function aFresh(c){ return c && (Date.now()-c.t < ADMIN_CACHE_TTL); }
+
 /* ════════════════════════════════════
    KHOÁ GHI: tự gắn mật khẩu admin vào mọi thao tác ghi
 ════════════════════════════════════ */
@@ -1152,11 +1165,20 @@ function switchLiveTab(view){
 }
 
 async function loadLiveSessions(){
-    document.getElementById('ll-list').innerHTML = '<div class="loading-row"><i class="fa-solid fa-spinner fa-spin" style="color:var(--blue);font-size:22px"></i></div>';
+    const CKEY = 'vlxt_admin_lichlive';
+    const cached = aCache(CKEY);
+    if(cached){
+        allLiveSessions = Array.isArray(cached.d) ? cached.d : [];
+        liveLoaded = true; renderLiveList();
+        if(aFresh(cached)) return;
+    } else {
+        document.getElementById('ll-list').innerHTML = '<div class="loading-row"><i class="fa-solid fa-spinner fa-spin" style="color:var(--blue);font-size:22px"></i></div>';
+    }
     try{
-        const r = await fetch(DB_URL + '?type=lichlive&t=' + Date.now());
+        const r = await fetch(DB_URL + '?type=lichlive');
         const data = await r.json();
         allLiveSessions = Array.isArray(data) ? data : [];
+        aSetCache(CKEY, data);
         liveLoaded = true;
     } catch(e) {
         allLiveSessions = [];
@@ -1334,15 +1356,23 @@ let allLessons = [];
 let currentFilter = 'all';
 
 async function loadLessons(){
-    document.getElementById('lesson-list-wrap').innerHTML=`<div class="loading-row"><i class="fa-solid fa-spinner fa-spin" style="color:var(--blue);font-size:24px"></i><p style="margin-top:12px;font-size:14px">Đang tải...</p></div>`;
+    const CKEY = 'vlxt_admin_baihoc';
+    const cached = aCache(CKEY);
+    if(cached){
+        allLessons = Array.isArray(cached.d) ? cached.d : (cached.d.baihoc || cached.d.data || []);
+        updateChuongList(); renderLessonList();
+        if(aFresh(cached)) return;
+    } else {
+        document.getElementById('lesson-list-wrap').innerHTML=`<div class="loading-row"><i class="fa-solid fa-spinner fa-spin" style="color:var(--blue);font-size:24px"></i><p style="margin-top:12px;font-size:14px">Đang tải...</p></div>`;
+    }
     try{
-        const r = await fetch(DB_URL + '?type=baihoc&t=' + Date.now());
+        const r = await fetch(DB_URL + '?type=baihoc');
         const data = await r.json();
         allLessons = Array.isArray(data) ? data : (data.baihoc || data.data || []);
+        aSetCache(CKEY, data);
     }catch(e){
-        console.warn('Không kết nối được Sheets, dùng demo:', e);
-        allLessons = [];
-        toast('<i class="fa-solid fa-triangle-exclamation"></i> Chưa kết nối được Google Sheets. Đang hiển thị giao diện trống.', 'err');
+        console.warn('Không kết nối được Sheets:', e);
+        if(!allLessons.length) toast('<i class="fa-solid fa-triangle-exclamation"></i> Chưa kết nối được Google Sheets.', 'err');
     }
     updateChuongList();
     renderLessonList();
@@ -1775,15 +1805,23 @@ async function doDelete(){
 let allScores=[], filteredScores=[];
 
 async function loadScores(){
-    document.getElementById('scores-table-body').innerHTML=`<div class="loading-row"><i class="fa-solid fa-spinner fa-spin" style="color:var(--blue);font-size:22px"></i><p style="margin-top:10px;font-size:14px">Đang tải...</p></div>`;
+    const CKEY = 'vlxt_admin_diemthi';
+    const cached = aCache(CKEY);
+    if(cached){
+        allScores=Array.isArray(cached.d)?cached.d:(cached.d.diemthi||cached.d.bangvang||cached.d.data||[]);
+        filteredScores=[...allScores]; renderStats(); renderScoresTable(filteredScores);
+        if(aFresh(cached)) return;
+    } else {
+        document.getElementById('scores-table-body').innerHTML=`<div class="loading-row"><i class="fa-solid fa-spinner fa-spin" style="color:var(--blue);font-size:22px"></i><p style="margin-top:10px;font-size:14px">Đang tải...</p></div>`;
+    }
     try{
-        const r=await fetch(DB_URL+'?type=diemthi&t='+Date.now());
+        const r=await fetch(DB_URL+'?type=diemthi');
         const data=await r.json();
         allScores=Array.isArray(data)?data:(data.diemthi||data.bangvang||data.data||[]);
+        aSetCache(CKEY, data);
     }catch(e){
         console.warn('Không tải được điểm thi:',e);
-        allScores=[];
-        toast('<i class="fa-solid fa-triangle-exclamation"></i> Chưa kết nối được Google Sheets.','err');
+        if(!allScores.length){ allScores=[]; toast('<i class="fa-solid fa-triangle-exclamation"></i> Chưa kết nối được Google Sheets.','err'); }
     }
     filteredScores=[...allScores];
     renderStats(); renderScoresTable(filteredScores);
@@ -2146,11 +2184,19 @@ function renderPreview2(skipped){
 let examListData = [];
 
 async function loadExamList() {
+    const CKEY = 'vlxt_admin_soande';
+    const cached = aCache(CKEY);
+    if(cached){
+        examListData = cached.d || [];
+        renderExamList(); populateExamSelect();
+        if(aFresh(cached)) return;
+    }
     try {
         const r = await fetch(DB_URL + '?type=danhsachde');
         const j = await r.json();
         examListData = (j.ok && j.data) ? j.data : [];
-    } catch(e) { examListData = []; }
+        aSetCache(CKEY, examListData);
+    } catch(e) { if(!examListData.length) examListData = []; }
     renderExamList();
     populateExamSelect();
 }
