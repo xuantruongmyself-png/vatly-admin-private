@@ -1120,7 +1120,7 @@ async function checkLogin(){
 // Tự động đăng nhập nếu đã có session
 if(localStorage.getItem('adminLoggedIn')==='1' && localStorage.getItem('adminKey')){
     document.getElementById('login-overlay').style.display='none';
-    initAdmin();
+    setTimeout(initAdmin, 0); // hoan 1 nhip de moi bien top-level kip khoi tao (tranh TDZ allLessons)
 }
 
 /* ════════════════════════════════════
