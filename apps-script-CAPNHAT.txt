@@ -65,8 +65,36 @@ function getOrCreate(name, headers) {
   if (!sheet) {
     sheet = ss.insertSheet(name);
     if (headers && headers.length) sheet.appendRow(headers);
+  } else if (headers && headers.length) {
+    // Thêm cột mới nếu sheet đã tồn tại nhưng thiếu cột
+    const lastCol = sheet.getLastColumn();
+    const existing = lastCol > 0
+      ? sheet.getRange(1, 1, 1, lastCol).getValues()[0].map(String)
+      : [];
+    headers.forEach(h => {
+      if (h && !existing.includes(String(h))) {
+        sheet.getRange(1, sheet.getLastColumn() + 1).setValue(h);
+        existing.push(String(h));
+      }
+    });
   }
   return sheet;
+}
+
+// Ghi 1 hàng vào sheet theo tên cột (an toàn khi cột bị đổi thứ tự)
+function writeRowNamed(sheet, rowIdx, dataObj) {
+  const lastCol = sheet.getLastColumn();
+  const headers = sheet.getRange(1, 1, 1, lastCol).getValues()[0];
+  const row = headers.map(h => (h && dataObj.hasOwnProperty(h)) ? dataObj[h] : '');
+  sheet.getRange(rowIdx, 1, 1, row.length).setValues([row]);
+}
+
+// Append hàng mới theo tên cột
+function appendRowNamed(sheet, dataObj) {
+  const lastCol = sheet.getLastColumn();
+  const headers = sheet.getRange(1, 1, 1, lastCol).getValues()[0];
+  const row = headers.map(h => (h && dataObj.hasOwnProperty(h)) ? dataObj[h] : '');
+  sheet.appendRow(row);
 }
 
 function sheetToJson(sheet) {
@@ -327,18 +355,24 @@ function saveProgress(data) {
 // ── POST: Quản lý bài học (Admin) ─────────────────────────────
 
 function saveBaiHoc(data) {
-  const sheet = getOrCreate('BaiHoc', ['KhoaHoc','Chuong','TenBai','Video','VideoGiai','MoTaBai','NgayDang','BaiTap','PDF']);
-  // Đảm bảo cột PDF tồn tại trong sheet cũ (không có cột 9)
-  if (!sheet.getRange(1, 9).getValue()) sheet.getRange(1, 9).setValue('PDF');
+  const COLS = ['KhoaHoc','Chuong','TenBai','Video','VideoGiai','MoTaBai','NgayDang','BaiTap','PDF'];
+  const sheet = getOrCreate('BaiHoc', COLS); // tự thêm cột thiếu nếu sheet cũ
   const rowIdx = data.rowIndex || findRowByKey(sheet, data.originalKey);
-  const vals = [
-    data.KhoaHoc||'', data.Chuong||'', data.TenBai||'', data.Video||'',
-    data.VideoGiai||'', data.MoTaBai||'', data.NgayDang||new Date().toISOString(), data.BaiTap||'', data.PDF||''
-  ];
+  const rowData = {
+    KhoaHoc:   data.KhoaHoc   || '',
+    Chuong:    data.Chuong    || '',
+    TenBai:    data.TenBai    || '',
+    Video:     data.Video     || '',
+    VideoGiai: data.VideoGiai || '',
+    MoTaBai:   data.MoTaBai   || '',
+    NgayDang:  data.NgayDang  || new Date().toISOString(),
+    BaiTap:    data.BaiTap    || '',
+    PDF:       data.PDF       || ''
+  };
   if (rowIdx) {
-    sheet.getRange(rowIdx, 1, 1, 9).setValues([vals]);
+    writeRowNamed(sheet, rowIdx, rowData);
   } else {
-    sheet.appendRow(vals);
+    appendRowNamed(sheet, rowData);
   }
   return jsonOut({ ok: true });
 }
