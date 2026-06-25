@@ -1114,6 +1114,7 @@ const ADMIN_CACHE_TTL = 5 * 60 * 1000; // 5 phút
 function aCache(key){ try{ const c=JSON.parse(localStorage.getItem(key)); return c||null; }catch{return null;} }
 function aSetCache(key,d){ try{ localStorage.setItem(key,JSON.stringify({t:Date.now(),d})); }catch{} }
 function aFresh(c){ return c && (Date.now()-c.t < ADMIN_CACHE_TTL); }
+function invalidateCache(){ try{localStorage.removeItem('vlxt_admin_baihoc'); if(window.clearVlxtCache) clearVlxtCache();}catch(e){} }
 
 /* ════════════════════════════════════
    KHOÁ GHI: tự gắn mật khẩu admin vào mọi thao tác ghi
@@ -1983,8 +1984,10 @@ async function saveLessonForm(){
         const orig=document.getElementById('f-original-key').value;
         if(orig && orig!==newKey){ allLessons=allLessons.filter(r=>{ const k=(r.KhoaHoc||r.khoahoc||r.course||'')+'|||'+(r.Chuong||r.chuong||r.chapter||'')+'|||'+(r.TenBai||r.tenbai||r.title||r.ten||''); return k!==orig; }); }
         const existing=allLessons.findIndex(r=>{ const k=(r.KhoaHoc||r.khoahoc||r.course||'')+'|||'+(r.Chuong||r.chuong||r.chapter||'')+'|||'+(r.TenBai||r.tenbai||r.title||r.ten||''); return k===newKey; });
-        const newRow={KhoaHoc:khoa,Chuong:chuong,TenBai:tenbai,Video:payload.Video,VideoGiai:payload.VideoGiai,MoTaBai:payload.MoTaBai,NgayDang:payload.NgayDang,BaiTap:payload.BaiTap,PDF:payload.PDF};
+        const newRow={KhoaHoc:khoa,Chuong:chuong,TenBai:tenbai,Video:payload.Video,VideoGiai:payload.VideoGiai,MoTaBai:payload.MoTaBai,NgayDang:payload.NgayDang,BaiTap:payload.BaiTap,PDF:payload.PDF||''};
         if(existing>=0) allLessons[existing]=newRow; else allLessons.push(newRow);
+        // Cập nhật localStorage cache để BaiTap không mất sau reload
+        try{localStorage.setItem('vlxt_admin_baihoc', JSON.stringify({t:Date.now(), d:allLessons}));}catch(e){}
         updateChuongList(); renderLessonList();
     }catch(err){
         toast('<i class="fa-solid fa-bug"></i> Lỗi lưu: '+err.message,'err');
