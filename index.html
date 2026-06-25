@@ -1839,7 +1839,7 @@ function addQuestion(q={}){
         <div class="qb-opt">
             <input type="radio" name="qcorrect-${qi}" value="${L}" ${(q.ans===L||q.correct===L)?'checked':''} title="Chọn làm đáp án đúng">
             <span class="qb-letter">${L}</span>
-            <input type="text" id="qopt-${qi}-${L}" placeholder="Đáp án ${L}..." value="${esc(q[L]||q[L.toLowerCase()]||'')}">
+            <input type="text" id="qopt-${qi}-${L}" placeholder="Đáp án ${L}..." value="${esc(q[L]||q[L.toLowerCase()]||q['opt'+L]||q['opt'+L.toLowerCase()]||'')}">
         </div>`).join('')}
     </div>`;
     document.getElementById('quiz-builder').insertAdjacentHTML('beforeend',html);
@@ -1973,7 +1973,8 @@ async function saveLessonForm(){
     const btn=document.getElementById('btn-save-lesson');
     btn.disabled=true; btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Đang lưu...';
     try{
-        await fetch(DB_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+        const _r=await fetch(DB_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+        await _r.json().catch(()=>{});
         try{localStorage.removeItem('vlxt_lessons_cache');}catch(e){}
         toast('<i class="fa-solid fa-circle-check"></i> Đã lưu bài giảng lên Google Sheets!','ok');
         showSyncBadge();
@@ -1982,7 +1983,7 @@ async function saveLessonForm(){
         const orig=document.getElementById('f-original-key').value;
         if(orig && orig!==newKey){ allLessons=allLessons.filter(r=>{ const k=(r.KhoaHoc||r.khoahoc||r.course||'')+'|||'+(r.Chuong||r.chuong||r.chapter||'')+'|||'+(r.TenBai||r.tenbai||r.title||r.ten||''); return k!==orig; }); }
         const existing=allLessons.findIndex(r=>{ const k=(r.KhoaHoc||r.khoahoc||r.course||'')+'|||'+(r.Chuong||r.chuong||r.chapter||'')+'|||'+(r.TenBai||r.tenbai||r.title||r.ten||''); return k===newKey; });
-        const newRow={KhoaHoc:khoa,Chuong:chuong,TenBai:tenbai,Video:payload.Video,VideoGiai:payload.VideoGiai,MoTaBai:payload.MoTaBai,NgayDang:payload.NgayDang,BaiTap:payload.BaiTap};
+        const newRow={KhoaHoc:khoa,Chuong:chuong,TenBai:tenbai,Video:payload.Video,VideoGiai:payload.VideoGiai,MoTaBai:payload.MoTaBai,NgayDang:payload.NgayDang,BaiTap:payload.BaiTap,PDF:payload.PDF};
         if(existing>=0) allLessons[existing]=newRow; else allLessons.push(newRow);
         updateChuongList(); renderLessonList();
     }catch(err){
@@ -2006,7 +2007,8 @@ async function doDelete(){
     const parts=keyToDelete.split('|||');
     const payload={action:'deleteBaiHoc',KhoaHoc:parts[0]||'',Chuong:parts[1]||'',TenBai:parts[2]||''};
     try{
-        await fetch(DB_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+        const _r=await fetch(DB_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+        await _r.json().catch(()=>{});
         try{localStorage.removeItem('vlxt_lessons_cache');}catch(e){}
         allLessons=allLessons.filter(r=>{
             const k=(r.KhoaHoc||r.khoahoc||r.course||'')+'|||'+(r.Chuong||r.chuong||r.chapter||'')+'|||'+(r.TenBai||r.tenbai||r.title||r.ten||'');
