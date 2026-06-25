@@ -1117,6 +1117,20 @@ let allLiveSessions = [];
 let liveLoaded = false;
 let liveTabView = 'upcoming'; // 'upcoming' | 'done'
 let KHOACONFIG = {}; // { fullName: { trangThai, loaiTK } }
+const MONTHS_VI_ADMIN = ['Th1','Th2','Th3','Th4','Th5','Th6','Th7','Th8','Th9','Th10','Th11','Th12'];
+let _deleteLiveId = null;
+const COURSE_EMOJI = {'Vật Lý 12':'⚛️','Vật Lý 11':'🔌','Vật Lý 10':'🚀'};
+const SUBJECT_EMOJI = {'Vật Lý 12':'⚛️','Vật Lý 11':'🔌','Vật Lý 10':'🚀'};
+let qCount=0;
+let pendingDelete='';
+let allScores=[], filteredScores=[];
+let parsedQuestions=[];
+const TL={mc:'A/B/C/D',tf:'Đúng/Sai',short:'Trả lời ngắn'};
+const SL={A:'a)',B:'b)',C:'c)',D:'d)'};
+let examListData = [];
+let _pendingDeleteExamId = null;
+let bankData=[], bankLoaded=false, bankParsed=[], bankSel=new Set();
+const NH_LOAI_TEN={TN:'Trắc nghiệm',DS:'Đúng/Sai',TLN:'Trả lời ngắn'};
 
 /* ════════════════════════════════════
    LOGIN
@@ -1211,7 +1225,6 @@ function parseVnDate(str){
     const [d,m,y] = (str+'').split('/').map(Number);
     return new Date(y,m-1,d);
 }
-const MONTHS_VI_ADMIN = ['Th1','Th2','Th3','Th4','Th5','Th6','Th7','Th8','Th9','Th10','Th11','Th12'];
 
 function renderLiveList(){
     const list = allLiveSessions
@@ -1352,7 +1365,6 @@ async function toggleLiveDone(id){
     try{ await fetch(DB_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)}); }catch(e){}
 }
 
-let _deleteLiveId = null;
 function deleteLive(id, title){
     _deleteLiveId = id;
     document.getElementById('confirm-msg').textContent = `Xóa buổi live "${title}"? Không thể hoàn tác.`;
@@ -1430,8 +1442,6 @@ function groupLessons(rows){
     return subjects;
 }
 
-const COURSE_EMOJI = {'Vật Lý 12':'⚛️','Vật Lý 11':'🔌','Vật Lý 10':'🚀'};
-const SUBJECT_EMOJI = {'Vật Lý 12':'⚛️','Vật Lý 11':'🔌','Vật Lý 10':'🚀'};
 
 // Tách "Luyện đề 2k8 - Vật Lý 12" → {subject:'Vật Lý 12', courseName:'Luyện đề 2k8'}
 function extractSC(khoaHoc){
@@ -1695,7 +1705,6 @@ Sẽ xóa ${affected.length} bài. Không thể hoàn tác!`)) return;
 }
 
 /* ── Form helpers ── */
-let qCount=0;
 
 function openNewForm(){
     document.getElementById('fp-empty').style.display='none';
@@ -1853,7 +1862,6 @@ async function saveLessonForm(){
 }
 
 /* ── Delete ── */
-let pendingDelete='';
 function confirmDelete(key){
     pendingDelete=key;
     const name=pendingDelete.split('|||')[2]||'bài này';
@@ -1882,7 +1890,6 @@ async function doDelete(){
 /* ════════════════════════════════════
    TAB 3: KẾT QUẢ THI
 ════════════════════════════════════ */
-let allScores=[], filteredScores=[];
 
 async function loadScores(){
     const CKEY = 'vlxt_admin_diemthi';
@@ -2052,7 +2059,6 @@ function setStatus2(html,isErr){
     s.innerHTML=html;
 }
 
-let parsedQuestions=[];
 
 async function handleFile(file){
     document.getElementById('preview-wrap2').style.display='none';
@@ -2222,8 +2228,6 @@ function wmfToDataUri(u8){
 }
 function compressUri(uri){return new Promise(resolve=>{const img=new Image();img.onload=()=>{const MW=640;let w=img.naturalWidth,h=img.naturalHeight;if(!w||!h){resolve(uri);return;}if(w>MW){h=Math.round(h*MW/w);w=MW;}const c=document.createElement('canvas');c.width=w;c.height=h;const ctx=c.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);ctx.drawImage(img,0,0,w,h);try{const out=c.toDataURL('image/jpeg',.75);resolve(out.length<uri.length?out:uri);}catch(e){resolve(uri);}}; img.onerror=()=>resolve(uri);img.src=uri;});}
 
-const TL={mc:'A/B/C/D',tf:'Đúng/Sai',short:'Trả lời ngắn'};
-const SL={A:'a)',B:'b)',C:'c)',D:'d)'};
 
 function renderPreview2(skipped){
     const wrap=document.getElementById('preview-wrap2'),preview=document.getElementById('preview2');
@@ -2261,7 +2265,6 @@ function renderPreview2(skipped){
    EXAM MANAGEMENT
 ═══════════════════════════════════════════ */
 
-let examListData = [];
 
 async function loadExamList() {
     const CKEY = 'vlxt_admin_soande';
@@ -2378,7 +2381,6 @@ async function toggleExamStatus(examId, curStatus) {
     setTimeout(loadExamList,1500);
 }
 
-let _pendingDeleteExamId = null;
 function confirmDeleteExam(examId, tenDe) {
     _pendingDeleteExamId = examId;
     document.getElementById('confirm-title').textContent = 'Xóa đề "' + tenDe + '"?';
@@ -2447,7 +2449,6 @@ function resetAll(){
 /* ════════════════════════════════════
    TAB: NGÂN HÀNG CÂU HỎI
 ════════════════════════════════════ */
-let bankData=[], bankLoaded=false, bankParsed=[], bankSel=new Set();
 
 /* Chuyển link Google Drive bất kỳ thành link ảnh hiển thị được */
 function driveImg(url){
@@ -2518,7 +2519,6 @@ function bankFiltered(){
         (!fp||q.phanLoai===fp)&&
         (!fs||((q.question||'')+(q.deBaiChung||'')).toLowerCase().includes(fs)) );
 }
-const NH_LOAI_TEN={TN:'Trắc nghiệm',DS:'Đúng/Sai',TLN:'Trả lời ngắn'};
 function bankRowHtml(q,withCheck){
     const sel=bankSel.has(q.id);
     const sub=['A','B','C','D'];
