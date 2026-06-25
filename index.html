@@ -1506,7 +1506,7 @@ async function loadKhoaConfig(){
     try{
         const r = await fetch(DB_URL + '?type=khoaconfig&t=' + Date.now());
         const d = await r.json();
-        (d.data||[]).forEach(c => { KHOACONFIG[c.khoaHoc] = { trangThai: c.trangThai||'open', loaiTK: c.loaiTK||'free,vip,premium', hienThi: c.hienThi!=='false' }; });
+        (d.data||[]).forEach(c => { KHOACONFIG[c.khoaHoc] = { trangThai: c.trangThai||'open', loaiTK: c.loaiTK||'free,vip,premium', hienThi: (c.hienThi!==undefined?c.hienThi:c[''])!=='false' }; });
     }catch(e){ console.warn('loadKhoaConfig error:', e); }
 }
 
