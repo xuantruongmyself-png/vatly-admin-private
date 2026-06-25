@@ -1213,7 +1213,7 @@ function todayStr(){ return new Date().toLocaleDateString('vi-VN'); }
 /* ════════════════════════════════════
    INIT
 ════════════════════════════════════ */
-function initAdmin(){ loadLessons(); loadKhoaConfig(); }
+async function initAdmin(){ await loadKhoaConfig(); loadLessons(); }
 
 /* ════════════════════════════════════
    TAB 5: LỊCH LIVE
