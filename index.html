@@ -159,6 +159,10 @@
         .course-action-btn.lock:hover { background:rgba(239,68,68,.15); }
         .course-action-btn.unlock { background:rgba(22,163,74,.07); color:var(--green); border-color:rgba(22,163,74,.25); }
         .course-action-btn.unlock:hover { background:rgba(22,163,74,.15); }
+        .course-action-btn.vis-on { background:rgba(16,185,129,.07); color:#10b981; border-color:rgba(16,185,129,.25); }
+        .course-action-btn.vis-on:hover { background:rgba(16,185,129,.15); }
+        .course-action-btn.vis-off { background:rgba(107,114,128,.07); color:#9ca3af; border-color:rgba(107,114,128,.25); }
+        .course-action-btn.vis-off:hover { background:rgba(107,114,128,.15); }
         .tier-row { display:flex; align-items:center; gap:6px; margin-left:auto; flex-wrap:wrap; }
         .tier-chip { display:inline-flex; align-items:center; gap:4px; font-size:11.5px; font-weight:700; padding:3px 10px; border-radius:20px; border:1.5px solid; cursor:pointer; transition:all .15s; user-select:none; }
         .tier-chip input { display:none; }
@@ -1477,13 +1481,13 @@ async function loadKhoaConfig(){
     try{
         const r = await fetch(DB_URL + '?type=khoaconfig&t=' + Date.now());
         const d = await r.json();
-        (d.data||[]).forEach(c => { KHOACONFIG[c.khoaHoc] = { trangThai: c.trangThai||'open', loaiTK: c.loaiTK||'free,vip,premium' }; });
+        (d.data||[]).forEach(c => { KHOACONFIG[c.khoaHoc] = { trangThai: c.trangThai||'open', loaiTK: c.loaiTK||'free,vip,premium', hienThi: c.hienThi!=='false' }; });
     }catch(e){ console.warn('loadKhoaConfig error:', e); }
 }
 
 async function saveKhoaConfig(fullName){
     const cfg = KHOACONFIG[fullName] || { trangThai:'open', loaiTK:'free,vip,premium' };
-    const payload = { action:'saveKhoaConfig', adminKey: getAdminKey(), khoaHoc: fullName, trangThai: cfg.trangThai, loaiTK: cfg.loaiTK };
+    const payload = { action:'saveKhoaConfig', adminKey: getAdminKey(), khoaHoc: fullName, trangThai: cfg.trangThai, loaiTK: cfg.loaiTK, hienThi: cfg.hienThi!==false ? 'true' : 'false' };
     try{ await fetch(DB_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)}); }catch(e){}
     toast('✅ Đã lưu cấu hình khoá: ' + (fullName.split(' - ')[0]||fullName), 'ok');
 }
@@ -1507,6 +1511,22 @@ function renderTierChips(fullName){
         const label = t==='free'?'Miễn phí':t==='vip'?'⭐ VIP':'💎 Premium';
         return `<span class="tier-chip ${t} ${on}" title="Click để bật/tắt" onclick="toggleTier('${fn}','${t}')">${label}</span>`;
     }).join('');
+}
+
+function renderVisibilityBtn(fullName){
+    const cfg = KHOACONFIG[fullName] || {};
+    const visible = cfg.hienThi !== false;
+    const fn = fullName.replace(/'/g,"&#39;");
+    return `<button class="course-action-btn ${visible?'vis-on':'vis-off'}" onclick="toggleHienThi('${fn}')">
+        <i class="fa-solid ${visible?'fa-eye':'fa-eye-slash'}"></i> ${visible?'Hiển thị':'Đang ẩn'}
+    </button>`;
+}
+
+function toggleHienThi(fullName){
+    if(!KHOACONFIG[fullName]) KHOACONFIG[fullName] = { trangThai:'open', loaiTK:'free,vip,premium', hienThi:true };
+    KHOACONFIG[fullName].hienThi = !KHOACONFIG[fullName].hienThi;
+    saveKhoaConfig(fullName);
+    renderLessonList();
 }
 
 function toggleKhoaStatus(fullName){
@@ -1545,6 +1565,7 @@ function renderCourseBlock(course){
             <button class="course-action-btn edit" onclick="renameCourse('${fn}')"><i class="fa-solid fa-pen"></i> Đổi tên khóa</button>
             <button class="course-action-btn del" onclick="deleteCourse('${fn}')"><i class="fa-solid fa-trash"></i> Xóa khóa này</button>
             ${renderLockBtn(course.fullName)}
+            ${renderVisibilityBtn(course.fullName)}
             <div class="tier-row">${renderTierChips(course.fullName)}</div>
         </div>
         <div class="chapter-group">`;
