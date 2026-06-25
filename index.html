@@ -1109,6 +1109,16 @@ function getAdminKey(){ return localStorage.getItem('adminKey') || ''; }
 })();
 
 /* ════════════════════════════════════
+   GLOBALS
+════════════════════════════════════ */
+let allLessons = [];
+let currentFilter = 'all';
+let allLiveSessions = [];
+let liveLoaded = false;
+let liveTabView = 'upcoming'; // 'upcoming' | 'done'
+let KHOACONFIG = {}; // { fullName: { trangThai, loaiTK } }
+
+/* ════════════════════════════════════
    LOGIN
 ════════════════════════════════════ */
 async function sha256(message) {
@@ -1165,9 +1175,6 @@ function initAdmin(){ loadLessons(); loadKhoaConfig(); }
 /* ════════════════════════════════════
    TAB 5: LỊCH LIVE
 ════════════════════════════════════ */
-let allLiveSessions = [];
-let liveLoaded = false;
-let liveTabView = 'upcoming'; // 'upcoming' | 'done'
 
 function switchLiveTab(view){
     liveTabView = view;
@@ -1365,8 +1372,6 @@ async function confirmDeleteLive(){
 /* ════════════════════════════════════
    TAB 1: QUẢN LÝ BÀI HỌC
 ════════════════════════════════════ */
-let allLessons = [];
-let currentFilter = 'all';
 
 async function loadLessons(){
     const CKEY = 'vlxt_admin_baihoc';
@@ -1457,7 +1462,6 @@ function updateKhoaOptions(){
 }
 
 // ── KHOACONFIG: Cấu hình đóng/mở khoá ─────────────────────────
-let KHOACONFIG = {}; // { fullName: { trangThai, loaiTK } }
 
 async function loadKhoaConfig(){
     try{
