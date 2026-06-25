@@ -155,6 +155,19 @@
         .course-action-btn.edit:hover { background:rgba(11,132,243,.15); }
         .course-action-btn.del { background:rgba(239,68,68,.07); color:#ef4444; border-color:rgba(239,68,68,.25); }
         .course-action-btn.del:hover { background:rgba(239,68,68,.15); }
+        .course-action-btn.lock { background:rgba(239,68,68,.07); color:#ef4444; border-color:rgba(239,68,68,.25); }
+        .course-action-btn.lock:hover { background:rgba(239,68,68,.15); }
+        .course-action-btn.unlock { background:rgba(22,163,74,.07); color:var(--green); border-color:rgba(22,163,74,.25); }
+        .course-action-btn.unlock:hover { background:rgba(22,163,74,.15); }
+        .tier-row { display:flex; align-items:center; gap:6px; margin-left:auto; flex-wrap:wrap; }
+        .tier-chip { display:inline-flex; align-items:center; gap:4px; font-size:11.5px; font-weight:700; padding:3px 10px; border-radius:20px; border:1.5px solid; cursor:pointer; transition:all .15s; user-select:none; }
+        .tier-chip input { display:none; }
+        .tier-chip.free { color:#64748b; border-color:#cbd5e1; background:rgba(100,116,139,.07); }
+        .tier-chip.free.on { color:#fff; border-color:#64748b; background:#64748b; }
+        .tier-chip.vip { color:#d97706; border-color:#fbbf24; background:rgba(251,191,36,.08); }
+        .tier-chip.vip.on { color:#fff; border-color:#d97706; background:#d97706; }
+        .tier-chip.premium { color:#7c3aed; border-color:#a78bfa; background:rgba(167,139,250,.08); }
+        .tier-chip.premium.on { color:#fff; border-color:#7c3aed; background:#7c3aed; }
         .course-emoji { font-size:22px; width:36px; text-align:center; flex-shrink:0; }
         .course-title { font-size:16px; font-weight:800; letter-spacing:-.02em; flex:1; }
         .course-meta { font-size:12.5px; color:var(--gray2); }
@@ -490,7 +503,6 @@
         body.dark .ch-btn.del:hover { border-color:#ef4444; color:#ef4444; background:rgba(239,68,68,.12); }
 
     </style>
-  <script src="cache.js"></script>
 </head>
 <body>
 
@@ -520,7 +532,7 @@
     <div class="nav-right">
         <button class="theme-toggle" onclick="toggleTheme()" title="Chuyển giao diện sáng/tối"><i class="fa-solid fa-circle-half-stroke"></i></button>
         <span class="sync-badge" id="sync-badge"><i class="fa-solid fa-circle-check"></i> Đã lưu</span>
-        <a href="https://xuantruongmyself-png.github.io/vatly-xuantruong/" target="_blank" class="btn-deploy" style="text-decoration:none">
+        <a href="baihoc.html" target="_blank" class="btn-deploy" style="text-decoration:none">
             <i class="fa-solid fa-eye"></i> Xem Web Học Sinh
         </a>
         <span class="admin-chip"><i class="fa-solid fa-gauge-high"></i> &nbsp;Admin</span>
@@ -1120,7 +1132,7 @@ async function checkLogin(){
 // Tự động đăng nhập nếu đã có session
 if(localStorage.getItem('adminLoggedIn')==='1' && localStorage.getItem('adminKey')){
     document.getElementById('login-overlay').style.display='none';
-    setTimeout(initAdmin, 0); // hoan 1 nhip de moi bien top-level kip khoi tao (tranh TDZ allLessons)
+    initAdmin();
 }
 
 /* ════════════════════════════════════
@@ -1148,7 +1160,7 @@ function todayStr(){ return new Date().toLocaleDateString('vi-VN'); }
 /* ════════════════════════════════════
    INIT
 ════════════════════════════════════ */
-function initAdmin(){ loadLessons(); }
+function initAdmin(){ loadLessons(); loadKhoaConfig(); }
 
 /* ════════════════════════════════════
    TAB 5: LỊCH LIVE
@@ -1176,7 +1188,7 @@ async function loadLiveSessions(){
         document.getElementById('ll-list').innerHTML = '<div class="loading-row"><i class="fa-solid fa-spinner fa-spin" style="color:var(--blue);font-size:22px"></i></div>';
     }
     try{
-        const r = await cachedFetch(DB_URL + '?type=lichlive');
+        const r = await fetch(DB_URL + '?type=lichlive');
         const data = await r.json();
         allLiveSessions = Array.isArray(data) ? data : [];
         aSetCache(CKEY, data);
@@ -1367,7 +1379,7 @@ async function loadLessons(){
         document.getElementById('lesson-list-wrap').innerHTML=`<div class="loading-row"><i class="fa-solid fa-spinner fa-spin" style="color:var(--blue);font-size:24px"></i><p style="margin-top:12px;font-size:14px">Đang tải...</p></div>`;
     }
     try{
-        const r = await cachedFetch(DB_URL + '?type=baihoc');
+        const r = await fetch(DB_URL + '?type=baihoc');
         const data = await r.json();
         allLessons = Array.isArray(data) ? data : (data.baihoc || data.data || []);
         aSetCache(CKEY, data);
@@ -1444,6 +1456,67 @@ function updateKhoaOptions(){
     dl.innerHTML = [...courses].map(n=>`<option value="${esc(n)}">`).join('');
 }
 
+// ── KHOACONFIG: Cấu hình đóng/mở khoá ─────────────────────────
+let KHOACONFIG = {}; // { fullName: { trangThai, loaiTK } }
+
+async function loadKhoaConfig(){
+    try{
+        const r = await fetch(DB_URL + '?type=khoaconfig&t=' + Date.now());
+        const d = await r.json();
+        (d.data||[]).forEach(c => { KHOACONFIG[c.khoaHoc] = { trangThai: c.trangThai||'open', loaiTK: c.loaiTK||'free,vip,premium' }; });
+    }catch(e){ console.warn('loadKhoaConfig error:', e); }
+}
+
+async function saveKhoaConfig(fullName){
+    const cfg = KHOACONFIG[fullName] || { trangThai:'open', loaiTK:'free,vip,premium' };
+    const payload = { action:'saveKhoaConfig', adminKey: getAdminKey(), khoaHoc: fullName, trangThai: cfg.trangThai, loaiTK: cfg.loaiTK };
+    try{ await fetch(DB_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)}); }catch(e){}
+    toast('✅ Đã lưu cấu hình khoá: ' + (fullName.split(' - ')[0]||fullName), 'ok');
+}
+
+function renderLockBtn(fullName){
+    const cfg = KHOACONFIG[fullName];
+    const closed = cfg && cfg.trangThai === 'closed';
+    const cls = closed ? 'lock' : 'unlock';
+    const ico = closed ? '🔒' : '🔓';
+    const lbl = closed ? 'Đang đóng' : 'Đang mở';
+    const fn = fullName.replace(/'/g,"&#39;");
+    return `<button class="course-action-btn ${cls}" onclick="toggleKhoaStatus('${fn}')">${ico} ${lbl}</button>`;
+}
+
+function renderTierChips(fullName){
+    const cfg = KHOACONFIG[fullName] || {};
+    const allowed = (cfg.loaiTK||'free,vip,premium').split(',').map(s=>s.trim());
+    const fn = fullName.replace(/'/g,"&#39;");
+    return ['free','vip','premium'].map(t=>{
+        const on = allowed.includes(t) ? 'on' : '';
+        const label = t==='free'?'Miễn phí':t==='vip'?'⭐ VIP':'💎 Premium';
+        return `<span class="tier-chip ${t} ${on}" title="Click để bật/tắt" onclick="toggleTier('${fn}','${t}')">${label}</span>`;
+    }).join('');
+}
+
+function toggleKhoaStatus(fullName){
+    if(!KHOACONFIG[fullName]) KHOACONFIG[fullName] = { trangThai:'open', loaiTK:'free,vip,premium' };
+    const cur = KHOACONFIG[fullName].trangThai;
+    KHOACONFIG[fullName].trangThai = cur === 'open' ? 'closed' : 'open';
+    saveKhoaConfig(fullName);
+    renderLessonList();
+}
+
+function toggleTier(fullName, tier){
+    if(!KHOACONFIG[fullName]) KHOACONFIG[fullName] = { trangThai:'open', loaiTK:'free,vip,premium' };
+    let tiers = KHOACONFIG[fullName].loaiTK.split(',').map(s=>s.trim()).filter(Boolean);
+    if(tiers.includes(tier)) {
+        tiers = tiers.filter(t=>t!==tier);
+        if(!tiers.length) tiers = ['free']; // luôn giữ ít nhất 1 tier
+    } else {
+        tiers.push(tier);
+    }
+    KHOACONFIG[fullName].loaiTK = tiers.join(',');
+    saveKhoaConfig(fullName);
+    renderLessonList();
+}
+
 function renderCourseBlock(course){
     const total=Object.values(course.chapters).reduce((s,arr)=>s+arr.length,0);
     const fn=esc(course.fullName).replace(/'/g,"&#39;");
@@ -1454,9 +1527,11 @@ function renderCourseBlock(course){
             <span class="course-meta">${Object.keys(course.chapters).length} chương · ${total} bài</span>
             <i class="fa-solid fa-chevron-right course-caret"></i>
         </div>
-        <div class="course-action-bar">
+        <div class="course-action-bar" id="cab-${fn}">
             <button class="course-action-btn edit" onclick="renameCourse('${fn}')"><i class="fa-solid fa-pen"></i> Đổi tên khóa</button>
             <button class="course-action-btn del" onclick="deleteCourse('${fn}')"><i class="fa-solid fa-trash"></i> Xóa khóa này</button>
+            ${renderLockBtn(course.fullName)}
+            <div class="tier-row">${renderTierChips(course.fullName)}</div>
         </div>
         <div class="chapter-group">`;
     Object.entries(course.chapters).forEach(([chName,lessons])=>{
@@ -1816,7 +1891,7 @@ async function loadScores(){
         document.getElementById('scores-table-body').innerHTML=`<div class="loading-row"><i class="fa-solid fa-spinner fa-spin" style="color:var(--blue);font-size:22px"></i><p style="margin-top:10px;font-size:14px">Đang tải...</p></div>`;
     }
     try{
-        const r=await cachedFetch(DB_URL+'?type=diemthi');
+        const r=await fetch(DB_URL+'?type=diemthi');
         const data=await r.json();
         allScores=Array.isArray(data)?data:(data.diemthi||data.bangvang||data.data||[]);
         aSetCache(CKEY, data);
@@ -2193,7 +2268,7 @@ async function loadExamList() {
         if(aFresh(cached)) return;
     }
     try {
-        const r = await cachedFetch(DB_URL + '?type=danhsachde');
+        const r = await fetch(DB_URL + '?type=danhsachde');
         const j = await r.json();
         examListData = (j.ok && j.data) ? j.data : [];
         aSetCache(CKEY, examListData);
@@ -2401,7 +2476,7 @@ async function loadBank(force){
     const list=document.getElementById('nh-list');
     list.innerHTML='<div class="loading-row" style="padding:40px"><i class="fa-solid fa-spinner fa-spin" style="color:var(--blue);font-size:22px"></i><p style="margin-top:10px;font-size:14px">Đang tải ngân hàng...</p></div>';
     try{
-        const r=await cachedFetch(DB_URL+'?type=nganhang&t='+Date.now());
+        const r=await fetch(DB_URL+'?type=nganhang&t='+Date.now());
         const j=await r.json();
         bankData=(j.data||[]).map(q=>{q={...q, loai:(q.loai||'TN').toString().toUpperCase().trim()}; if(!q.phanLoai) q.phanLoai=classifyTaxonomy(q); return q;});
         bankLoaded=true; bankSel.clear();
