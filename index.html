@@ -231,6 +231,28 @@
         .quiz-section-head label { font-size:12.5px; font-weight:700; color:var(--gray); text-transform:uppercase; letter-spacing:.4px; }
         .btn-add-q { display:inline-flex; align-items:center; gap:6px; padding:7px 14px; border:1.5px dashed var(--border); border-radius:8px; background:transparent; color:var(--blue); font-size:13px; font-weight:600; cursor:pointer; transition:all .15s; font-family:'Inter',sans-serif; }
         .btn-add-q:hover { border-color:var(--blue); background:rgba(11,132,243,.04); }
+        .btn-from-bank { display:inline-flex; align-items:center; gap:6px; padding:7px 14px; border:1.5px solid rgba(11,132,243,.35); border-radius:8px; background:rgba(11,132,243,.06); color:var(--blue); font-size:13px; font-weight:600; cursor:pointer; transition:all .15s; font-family:'Inter',sans-serif; }
+        .btn-from-bank:hover { background:rgba(11,132,243,.12); border-color:var(--blue); }
+        /* Modal picker */
+        #bank-picker-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:2000; align-items:center; justify-content:center; }
+        #bank-picker-overlay.show { display:flex; }
+        #bank-picker-modal { background:var(--card); border-radius:16px; width:min(780px,95vw); max-height:85vh; display:flex; flex-direction:column; box-shadow:0 24px 60px rgba(0,0,0,.4); border:1px solid var(--line); }
+        .bpm-head { padding:18px 20px 12px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:10px; }
+        .bpm-head h3 { margin:0; font-size:16px; flex:1; }
+        .bpm-filters { padding:12px 20px; display:flex; gap:8px; flex-wrap:wrap; border-bottom:1px solid var(--line); }
+        .bpm-filters input,.bpm-filters select { padding:7px 10px; border:1.5px solid var(--border); border-radius:8px; background:var(--bg2); color:var(--text); font-size:13px; font-family:inherit; }
+        .bpm-filters input { flex:1; min-width:180px; }
+        .bpm-body { overflow-y:auto; flex:1; padding:12px 20px; }
+        .bpm-item { display:flex; gap:10px; align-items:flex-start; padding:12px 0; border-bottom:1px solid var(--line); cursor:pointer; }
+        .bpm-item:last-child { border-bottom:none; }
+        .bpm-item:hover { opacity:.85; }
+        .bpm-item.selected { background:rgba(11,132,243,.05); border-radius:8px; padding:12px 8px; margin:0 -8px; }
+        .bpm-item input[type=checkbox] { margin-top:3px; flex-shrink:0; width:16px; height:16px; cursor:pointer; accent-color:var(--blue); }
+        .bpm-q-text { font-size:13.5px; line-height:1.5; flex:1; }
+        .bpm-q-meta { display:flex; gap:5px; flex-wrap:wrap; margin-bottom:4px; }
+        .bpm-foot { padding:14px 20px; border-top:1px solid var(--line); display:flex; align-items:center; gap:10px; }
+        .bpm-foot .bpm-count { font-size:13px; color:var(--gray2); flex:1; }
+        .bpm-empty { text-align:center; padding:40px; color:var(--gray2); font-size:14px; }
         .qb-card { background:var(--bg2); border:1.5px solid var(--border); border-radius:10px; padding:14px; margin-bottom:10px; }
         .qb-head { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
         .qb-num { font-size:12px; font-weight:700; color:var(--blue); font-family:'DM Mono',monospace; flex:1; }
@@ -654,7 +676,10 @@
                         <div class="form-field">
                             <div class="quiz-section-head">
                                 <label>Bài tập trắc nghiệm <span style="font-weight:400;color:var(--gray2)">(tùy chọn)</span></label>
-                                <button class="btn-add-q" onclick="addQuestion()"><i class="fa-solid fa-plus"></i> Thêm câu</button>
+                                <div style="display:flex;gap:6px;flex-wrap:wrap">
+                                    <button class="btn-from-bank" onclick="openBankPicker()"><i class="fa-solid fa-database"></i> Chọn từ ngân hàng</button>
+                                    <button class="btn-add-q" onclick="addQuestion()"><i class="fa-solid fa-plus"></i> Thêm tay</button>
+                                </div>
                             </div>
                             <div id="quiz-builder"></div>
                         </div>
@@ -1822,6 +1847,90 @@ function addQuestion(q={}){
 
 function removeQuestion(qi){ document.getElementById('qcard-'+qi)?.remove(); }
 
+/* ════ BANK PICKER ════ */
+let _bpmSel = new Set(); // IDs câu đã chọn trong modal
+
+function openBankPicker(){
+    _bpmSel.clear();
+    document.getElementById('bank-picker-overlay').classList.add('show');
+    document.getElementById('bpm-search').value='';
+    if(!bankLoaded){
+        // Load ngân hàng nếu chưa có
+        document.getElementById('bpm-body').innerHTML='<div class="bpm-empty"><i class="fa-solid fa-spinner fa-spin" style="font-size:24px;color:var(--blue)"></i><p style="margin-top:10px">Đang tải ngân hàng...</p></div>';
+        fetch(DB_URL+'?type=nganhang&t='+Date.now()).then(r=>r.json()).then(j=>{
+            bankData=(j.data||[]).map(q=>({...q, loai:(q.loai||'TN').toString().toUpperCase().trim()}));
+            bankLoaded=true;
+            _fillBpmChuong(); renderBPM();
+        }).catch(e=>{ document.getElementById('bpm-body').innerHTML='<div class="bpm-empty" style="color:var(--red)">Lỗi tải: '+e.message+'</div>'; });
+    } else {
+        _fillBpmChuong(); renderBPM();
+    }
+}
+
+function _fillBpmChuong(){
+    const chuongs=[...new Set(bankData.filter(q=>q.loai==='TN').map(q=>q.chuong).filter(Boolean))].sort();
+    const sel=document.getElementById('bpm-chuong');
+    sel.innerHTML='<option value="">Tất cả chương</option>'+chuongs.map(c=>`<option value="${nhEsc(c)}">${nhEsc(c)}</option>`).join('');
+}
+
+function renderBPM(){
+    const q=(document.getElementById('bpm-search').value||'').toLowerCase();
+    const ch=document.getElementById('bpm-chuong').value;
+    // Chỉ hiện câu TN (A/B/C/D) vì bài học chỉ hỗ trợ loại này
+    const filtered=bankData.filter(item=>
+        item.loai==='TN' &&
+        (!ch||item.chuong===ch) &&
+        (!q||(item.question||'').toLowerCase().includes(q))
+    );
+    const body=document.getElementById('bpm-body');
+    document.getElementById('bpm-count-label').textContent=filtered.length+' câu (chỉ A/B/C/D)';
+    if(!filtered.length){ body.innerHTML='<div class="bpm-empty">Không tìm thấy câu nào.</div>'; return; }
+    body.innerHTML=filtered.slice(0,80).map(item=>{
+        const sel=_bpmSel.has(item.id);
+        const opts=['A','B','C','D'].filter(L=>item['opt'+L]).map(L=>`<span style="margin-right:10px;font-size:12px"><b style="color:${(item.correct||'').trim().toUpperCase()===L?'var(--green)':'inherit'}">${L}.</b> ${nhEsc(item['opt'+L]||'')}</span>`).join('');
+        return `<label class="bpm-item ${sel?'selected':''}" id="bpm-r-${nhEsc(item.id)}" style="display:flex;cursor:pointer">
+            <input type="checkbox" ${sel?'checked':''} onchange="bpmToggle('${nhEsc(item.id)}',this.checked)" onclick="event.stopPropagation()">
+            <div class="bpm-q-text">
+                <div class="bpm-q-meta">
+                    ${item.chuong?`<span class="nh-badge b-ch" style="font-size:10px">${nhEsc(item.chuong)}</span>`:''}
+                    ${item.mucDo?`<span class="nh-badge" style="font-size:10px">${nhEsc(item.mucDo)}</span>`:''}
+                </div>
+                <div style="margin-bottom:5px">${nhSafe(item.question)}</div>
+                <div>${opts}</div>
+            </div>
+        </label>`;
+    }).join('');
+    nhKatex(body);
+    updateBpmCount();
+}
+
+function bpmToggle(id,on){
+    if(on) _bpmSel.add(id); else _bpmSel.delete(id);
+    const row=document.getElementById('bpm-r-'+id);
+    if(row) row.classList.toggle('selected',on);
+    updateBpmCount();
+}
+
+function updateBpmCount(){
+    document.getElementById('bpm-sel-count').textContent=_bpmSel.size?`${_bpmSel.size} câu chọn`:'0 câu chọn';
+    document.getElementById('bpm-add-btn').disabled=_bpmSel.size===0;
+}
+
+function addFromBankPicker(){
+    if(!_bpmSel.size){ toast('Chưa chọn câu nào!','err'); return; }
+    const chosen=bankData.filter(q=>_bpmSel.has(q.id)&&q.loai==='TN');
+    chosen.forEach(q=>{
+        addQuestion({ q:q.question, A:q.optA||'', B:q.optB||'', C:q.optC||'', D:q.optD||'', ans:(q.correct||'').trim().toUpperCase() });
+    });
+    toast(`<i class="fa-solid fa-circle-check"></i> Đã thêm ${chosen.length} câu từ ngân hàng!`,'ok');
+    closeBankPicker();
+}
+
+function closeBankPicker(){
+    document.getElementById('bank-picker-overlay').classList.remove('show');
+    _bpmSel.clear();
+}
+
 function getQuestionsFromForm(){
     const cards=document.querySelectorAll('#quiz-builder .qb-card');
     const qs=[];
@@ -2718,5 +2827,27 @@ async function bankHandleFile(file){
 function toggleTheme(){document.body.classList.toggle('dark');localStorage.setItem('vlxt_theme',document.body.classList.contains('dark')?'dark':'light');}
 if(localStorage.getItem('vlxt_theme')==='dark')document.body.classList.add('dark');
 </script>
+
+<!-- ══════ BANK PICKER MODAL ══════ -->
+<div id="bank-picker-overlay">
+    <div id="bank-picker-modal">
+        <div class="bpm-head">
+            <i class="fa-solid fa-database" style="color:var(--blue);font-size:18px"></i>
+            <h3>Chọn câu từ Ngân hàng</h3>
+            <span id="bpm-sel-count" style="font-size:13px;font-weight:700;color:var(--blue)">0 câu chọn</span>
+            <button onclick="closeBankPicker()" style="background:none;border:none;font-size:18px;color:var(--gray2);cursor:pointer;margin-left:4px"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="bpm-filters">
+            <input id="bpm-search" placeholder="🔍 Tìm câu hỏi..." oninput="renderBPM()">
+            <select id="bpm-chuong" onchange="renderBPM()"><option value="">Tất cả chương</option></select>
+        </div>
+        <div class="bpm-body" id="bpm-body"></div>
+        <div class="bpm-foot">
+            <span class="bpm-count" id="bpm-count-label"></span>
+            <button onclick="closeBankPicker()" style="padding:8px 16px;border:1.5px solid var(--border);border-radius:8px;background:transparent;color:var(--text);font-size:13px;font-weight:600;cursor:pointer">Huỷ</button>
+            <button id="bpm-add-btn" onclick="addFromBankPicker()" style="padding:8px 18px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px"><i class="fa-solid fa-plus"></i> Thêm vào bài</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>
