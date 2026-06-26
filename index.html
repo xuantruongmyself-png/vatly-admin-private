@@ -2807,7 +2807,7 @@ function qlStartLive() {
         isLive:  true,
         startedAt: Date.now()
     }).then(() => {
-        showToast('✅ Đã phát live! Học sinh thấy ngay.');
+        toast('✅ Đã phát live! Học sinh thấy ngay.');
     }).catch(e => {
         alert('Lỗi ghi Firebase: ' + e.message);
     });
@@ -2816,7 +2816,7 @@ function qlStartLive() {
 function qlStopLive() {
     if (!qlDb) { alert('Chưa kết nối Firebase!'); return; }
     qlDb.ref('live_config/current').update({ videoId: '', isLive: false }).then(() => {
-        showToast('⏹ Đã dừng live.');
+        toast('⏹ Đã dừng live.');
     }).catch(e => {
         alert('Lỗi ghi Firebase: ' + e.message);
     });
