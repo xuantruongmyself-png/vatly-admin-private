@@ -155,23 +155,6 @@
         .course-action-btn.edit:hover { background:rgba(11,132,243,.15); }
         .course-action-btn.del { background:rgba(239,68,68,.07); color:#ef4444; border-color:rgba(239,68,68,.25); }
         .course-action-btn.del:hover { background:rgba(239,68,68,.15); }
-        .course-action-btn.lock { background:rgba(239,68,68,.07); color:#ef4444; border-color:rgba(239,68,68,.25); }
-        .course-action-btn.lock:hover { background:rgba(239,68,68,.15); }
-        .course-action-btn.unlock { background:rgba(22,163,74,.07); color:var(--green); border-color:rgba(22,163,74,.25); }
-        .course-action-btn.unlock:hover { background:rgba(22,163,74,.15); }
-        .course-action-btn.vis-on { background:rgba(16,185,129,.07); color:#10b981; border-color:rgba(16,185,129,.25); }
-        .course-action-btn.vis-on:hover { background:rgba(16,185,129,.15); }
-        .course-action-btn.vis-off { background:rgba(107,114,128,.07); color:#9ca3af; border-color:rgba(107,114,128,.25); }
-        .course-action-btn.vis-off:hover { background:rgba(107,114,128,.15); }
-        .tier-row { display:flex; align-items:center; gap:6px; margin-left:auto; flex-wrap:wrap; }
-        .tier-chip { display:inline-flex; align-items:center; gap:4px; font-size:11.5px; font-weight:700; padding:3px 10px; border-radius:20px; border:1.5px solid; cursor:pointer; transition:all .15s; user-select:none; }
-        .tier-chip input { display:none; }
-        .tier-chip.free { color:#64748b; border-color:#cbd5e1; background:rgba(100,116,139,.07); }
-        .tier-chip.free.on { color:#fff; border-color:#64748b; background:#64748b; }
-        .tier-chip.vip { color:#d97706; border-color:#fbbf24; background:rgba(251,191,36,.08); }
-        .tier-chip.vip.on { color:#fff; border-color:#d97706; background:#d97706; }
-        .tier-chip.premium { color:#7c3aed; border-color:#a78bfa; background:rgba(167,139,250,.08); }
-        .tier-chip.premium.on { color:#fff; border-color:#7c3aed; background:#7c3aed; }
         .course-emoji { font-size:22px; width:36px; text-align:center; flex-shrink:0; }
         .course-title { font-size:16px; font-weight:800; letter-spacing:-.02em; flex:1; }
         .course-meta { font-size:12.5px; color:var(--gray2); }
@@ -231,28 +214,6 @@
         .quiz-section-head label { font-size:12.5px; font-weight:700; color:var(--gray); text-transform:uppercase; letter-spacing:.4px; }
         .btn-add-q { display:inline-flex; align-items:center; gap:6px; padding:7px 14px; border:1.5px dashed var(--border); border-radius:8px; background:transparent; color:var(--blue); font-size:13px; font-weight:600; cursor:pointer; transition:all .15s; font-family:'Inter',sans-serif; }
         .btn-add-q:hover { border-color:var(--blue); background:rgba(11,132,243,.04); }
-        .btn-from-bank { display:inline-flex; align-items:center; gap:6px; padding:7px 14px; border:1.5px solid rgba(11,132,243,.35); border-radius:8px; background:rgba(11,132,243,.06); color:var(--blue); font-size:13px; font-weight:600; cursor:pointer; transition:all .15s; font-family:'Inter',sans-serif; }
-        .btn-from-bank:hover { background:rgba(11,132,243,.12); border-color:var(--blue); }
-        /* Modal picker */
-        #bank-picker-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:2000; align-items:center; justify-content:center; }
-        #bank-picker-overlay.show { display:flex; }
-        #bank-picker-modal { background:var(--card); border-radius:16px; width:min(780px,95vw); max-height:85vh; display:flex; flex-direction:column; box-shadow:0 24px 60px rgba(0,0,0,.4); border:1px solid var(--line); }
-        .bpm-head { padding:18px 20px 12px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:10px; }
-        .bpm-head h3 { margin:0; font-size:16px; flex:1; }
-        .bpm-filters { padding:12px 20px; display:flex; gap:8px; flex-wrap:wrap; border-bottom:1px solid var(--line); }
-        .bpm-filters input,.bpm-filters select { padding:7px 10px; border:1.5px solid var(--border); border-radius:8px; background:var(--bg2); color:var(--text); font-size:13px; font-family:inherit; }
-        .bpm-filters input { flex:1; min-width:180px; }
-        .bpm-body { overflow-y:auto; flex:1; padding:12px 20px; }
-        .bpm-item { display:flex; gap:10px; align-items:flex-start; padding:12px 0; border-bottom:1px solid var(--line); cursor:pointer; }
-        .bpm-item:last-child { border-bottom:none; }
-        .bpm-item:hover { opacity:.85; }
-        .bpm-item.selected { background:rgba(11,132,243,.05); border-radius:8px; padding:12px 8px; margin:0 -8px; }
-        .bpm-item input[type=checkbox] { margin-top:3px; flex-shrink:0; width:16px; height:16px; cursor:pointer; accent-color:var(--blue); }
-        .bpm-q-text { font-size:13.5px; line-height:1.5; flex:1; }
-        .bpm-q-meta { display:flex; gap:5px; flex-wrap:wrap; margin-bottom:4px; }
-        .bpm-foot { padding:14px 20px; border-top:1px solid var(--line); display:flex; align-items:center; gap:10px; }
-        .bpm-foot .bpm-count { font-size:13px; color:var(--gray2); flex:1; }
-        .bpm-empty { text-align:center; padding:40px; color:var(--gray2); font-size:14px; }
         .qb-card { background:var(--bg2); border:1.5px solid var(--border); border-radius:10px; padding:14px; margin-bottom:10px; }
         .qb-head { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
         .qb-num { font-size:12px; font-weight:700; color:var(--blue); font-family:'DM Mono',monospace; flex:1; }
@@ -263,8 +224,8 @@
         .qb-opt { display:flex; align-items:center; gap:8px; margin-bottom:7px; }
         .qb-opt:last-child { margin-bottom:0; }
         .qb-letter { width:24px; height:24px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; flex-shrink:0; background:var(--border); color:var(--gray); font-family:'DM Mono',monospace; }
-        .qb-opt input[type=radio] { accent-color:var(--green); flex-shrink:0; width:auto !important; }
-        .qb-opt input[type=text] { flex:1; width:auto !important; min-width:0; padding:8px 10px; border-radius:6px; border:1.5px solid var(--border); background:var(--bg); color:var(--black); font-family:'Inter',sans-serif; font-size:13px; outline:none; }
+        .qb-opt input[type=radio] { accent-color:var(--green); flex-shrink:0; }
+        .qb-opt input[type=text] { flex:1; padding:8px 10px; border-radius:6px; border:1.5px solid var(--border); background:var(--bg); color:var(--black); font-family:'Inter',sans-serif; font-size:13px; outline:none; }
         .qb-opt input[type=text]:focus { border-color:var(--blue); }
         .qb-opt input[type=radio]:checked ~ .qb-letter { background:rgba(22,163,74,.15); color:var(--green); }
 
@@ -529,6 +490,7 @@
         body.dark .ch-btn.del:hover { border-color:#ef4444; color:#ef4444; background:rgba(239,68,68,.12); }
 
     </style>
+  <script src="cache.js"></script>
 </head>
 <body>
 
@@ -581,6 +543,9 @@
     </button>
     <button class="tab-btn" onclick="switchTab('lichlive')" id="tab-lichlive-btn">
         <i class="fa-solid fa-satellite-dish"></i> Lịch Live
+    </button>
+    <button class="tab-btn" onclick="switchTab('quanlylive')" id="tab-quanlylive-btn">
+        <i class="fa-solid fa-tower-broadcast"></i> Quản lý Live
     </button>
 </div>
 
@@ -676,10 +641,7 @@
                         <div class="form-field">
                             <div class="quiz-section-head">
                                 <label>Bài tập trắc nghiệm <span style="font-weight:400;color:var(--gray2)">(tùy chọn)</span></label>
-                                <div style="display:flex;gap:6px;flex-wrap:wrap">
-                                    <button class="btn-from-bank" onclick="openBankPicker()"><i class="fa-solid fa-database"></i> Chọn từ ngân hàng</button>
-                                    <button class="btn-add-q" onclick="addQuestion()"><i class="fa-solid fa-plus"></i> Thêm tay</button>
-                                </div>
+                                <button class="btn-add-q" onclick="addQuestion()"><i class="fa-solid fa-plus"></i> Thêm câu</button>
                             </div>
                             <div id="quiz-builder"></div>
                         </div>
@@ -1088,6 +1050,87 @@
 </div>
 </div>
 
+
+<!-- ════════════════════════════════════
+     TAB 6: QUẢN LÝ LIVE (Firebase)
+════════════════════════════════════ -->
+<div class="tab-content" id="tab-quanlylive">
+<div class="wrap">
+    <div class="lm-toolbar" style="margin-bottom:20px">
+        <h2><i class="fa-solid fa-tower-broadcast" style="color:var(--blue);font-size:20px"></i> Quản lý Live</h2>
+        <a href="https://xuantruongmyself-png.github.io/vatly-xuantruong/live.html" target="_blank" class="btn-new" style="text-decoration:none">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> Xem trang học sinh
+        </a>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px">
+        <!-- Trạng thái hiện tại -->
+        <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:20px">
+            <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gray);margin-bottom:10px">TRẠNG THÁI HIỆN TẠI</div>
+            <div id="ql-status-badge" style="display:inline-flex;align-items:center;gap:6px;background:#f0f0f0;color:#555;padding:5px 14px;border-radius:20px;font-size:13px;font-weight:700;margin-bottom:8px">
+                <span style="width:8px;height:8px;background:#888;border-radius:50%;display:inline-block"></span> Đang tải...
+            </div>
+            <div id="ql-current-video" style="font-size:13px;color:var(--gray2);margin-top:6px">—</div>
+        </div>
+
+        <!-- Số người đang xem -->
+        <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:20px">
+            <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gray);margin-bottom:10px">ĐANG XEM</div>
+            <div style="font-size:42px;font-weight:900;color:var(--blue);letter-spacing:-.04em" id="ql-viewer-count">—</div>
+            <div style="font-size:12px;color:var(--gray2);margin-top:4px">học sinh đang trên trang Live</div>
+        </div>
+    </div>
+
+    <!-- Form phát live -->
+    <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:24px;margin-bottom:20px">
+        <div style="font-size:15px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px">
+            <i class="fa-solid fa-circle-play" style="color:var(--blue)"></i> Bắt đầu buổi live
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+            <div style="grid-column:1/-1">
+                <label class="field-label">🔗 Link YouTube hoặc Video ID *</label>
+                <input class="field-input" id="ql-url" type="text"
+                    placeholder="https://youtu.be/abc123 hoặc chỉ dán abc123"
+                    oninput="qlPreviewUrl(this.value)">
+                <div style="font-size:11.5px;color:var(--gray2);margin-top:4px">Lấy từ YouTube Studio → Copy link luồng → dán vào đây</div>
+            </div>
+            <div style="grid-column:1/-1">
+                <label class="field-label">📝 Tiêu đề buổi live</label>
+                <input class="field-input" id="ql-title" type="text"
+                    placeholder="VD: Live dạy Vật Lý 12 — Dao động cơ">
+            </div>
+        </div>
+
+        <!-- Preview video ID -->
+        <div id="ql-id-preview" style="display:none;background:rgba(11,132,243,.06);border:1px solid rgba(11,132,243,.2);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--blue);margin-bottom:14px">
+            <i class="fa-brands fa-youtube"></i> Video ID: <strong id="ql-id-text"></strong>
+        </div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button onclick="qlStartLive()" style="background:var(--blue);color:#fff;border:none;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:8px">
+                <i class="fa-solid fa-circle-dot" style="color:#ff4444"></i> Phát Live
+            </button>
+            <button onclick="qlStopLive()" style="background:#fff;color:var(--gray);border:1.5px solid var(--border);padding:12px 24px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:8px">
+                <i class="fa-solid fa-stop"></i> Dừng Live
+            </button>
+        </div>
+    </div>
+
+    <div style="background:rgba(11,132,243,.05);border:1px solid rgba(11,132,243,.15);border-radius:10px;padding:14px 18px;font-size:13px;color:var(--gray);line-height:1.7">
+        <strong style="color:var(--blue)">Hướng dẫn:</strong><br>
+        1. Mở YouTube Studio → nhấn <b>Phát trực tiếp</b> → copy URL stream (ví dụ <code>https://youtu.be/abc123xyz</code>)<br>
+        2. Dán URL vào ô trên → nhập tiêu đề → nhấn <b>Phát Live</b><br>
+        3. Học sinh trên trang live.html sẽ thấy video ngay lập tức, không cần F5<br>
+        4. Sau khi kết thúc → nhấn <b>Dừng Live</b> để tắt video trên trang học sinh
+    </div>
+
+    <div id="ql-firebase-error" style="display:none;background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.2);border-radius:10px;padding:14px 18px;font-size:13px;color:var(--red);margin-top:14px">
+        <i class="fa-solid fa-triangle-exclamation"></i> <span id="ql-error-msg">Chưa kết nối Firebase</span>
+    </div>
+</div>
+</div>
+
 <!-- CONFIRM DELETE -->
 <div class="confirm-overlay" id="confirm-overlay">
     <div class="confirm-box">
@@ -1139,30 +1182,6 @@ function getAdminKey(){ return localStorage.getItem('adminKey') || ''; }
 })();
 
 /* ════════════════════════════════════
-   GLOBALS
-════════════════════════════════════ */
-let allLessons = [];
-let currentFilter = 'all';
-let allLiveSessions = [];
-let liveLoaded = false;
-let liveTabView = 'upcoming'; // 'upcoming' | 'done'
-let KHOACONFIG = {}; // { fullName: { trangThai, loaiTK } }
-const MONTHS_VI_ADMIN = ['Th1','Th2','Th3','Th4','Th5','Th6','Th7','Th8','Th9','Th10','Th11','Th12'];
-let _deleteLiveId = null;
-const COURSE_EMOJI = {'Vật Lý 12':'⚛️','Vật Lý 11':'🔌','Vật Lý 10':'🚀'};
-const SUBJECT_EMOJI = {'Vật Lý 12':'⚛️','Vật Lý 11':'🔌','Vật Lý 10':'🚀'};
-let qCount=0;
-let pendingDelete='';
-let allScores=[], filteredScores=[];
-let parsedQuestions=[];
-const TL={mc:'A/B/C/D',tf:'Đúng/Sai',short:'Trả lời ngắn'};
-const SL={A:'a)',B:'b)',C:'c)',D:'d)'};
-let examListData = [];
-let _pendingDeleteExamId = null;
-let bankData=[], bankLoaded=false, bankParsed=[], bankSel=new Set();
-const NH_LOAI_TEN={TN:'Trắc nghiệm',DS:'Đúng/Sai',TLN:'Trả lời ngắn'};
-
-/* ════════════════════════════════════
    LOGIN
 ════════════════════════════════════ */
 async function sha256(message) {
@@ -1186,7 +1205,7 @@ async function checkLogin(){
 // Tự động đăng nhập nếu đã có session
 if(localStorage.getItem('adminLoggedIn')==='1' && localStorage.getItem('adminKey')){
     document.getElementById('login-overlay').style.display='none';
-    initAdmin();
+    setTimeout(initAdmin, 0); // hoan 1 nhip de moi bien top-level kip khoi tao (tranh TDZ allLessons)
 }
 
 /* ════════════════════════════════════
@@ -1214,11 +1233,14 @@ function todayStr(){ return new Date().toLocaleDateString('vi-VN'); }
 /* ════════════════════════════════════
    INIT
 ════════════════════════════════════ */
-async function initAdmin(){ await loadKhoaConfig(); loadLessons(); }
+function initAdmin(){ loadLessons(); }
 
 /* ════════════════════════════════════
    TAB 5: LỊCH LIVE
 ════════════════════════════════════ */
+let allLiveSessions = [];
+let liveLoaded = false;
+let liveTabView = 'upcoming'; // 'upcoming' | 'done'
 
 function switchLiveTab(view){
     liveTabView = view;
@@ -1239,7 +1261,7 @@ async function loadLiveSessions(){
         document.getElementById('ll-list').innerHTML = '<div class="loading-row"><i class="fa-solid fa-spinner fa-spin" style="color:var(--blue);font-size:22px"></i></div>';
     }
     try{
-        const r = await fetch(DB_URL + '?type=lichlive');
+        const r = await cachedFetch(DB_URL + '?type=lichlive');
         const data = await r.json();
         allLiveSessions = Array.isArray(data) ? data : [];
         aSetCache(CKEY, data);
@@ -1255,6 +1277,7 @@ function parseVnDate(str){
     const [d,m,y] = (str+'').split('/').map(Number);
     return new Date(y,m-1,d);
 }
+const MONTHS_VI_ADMIN = ['Th1','Th2','Th3','Th4','Th5','Th6','Th7','Th8','Th9','Th10','Th11','Th12'];
 
 function renderLiveList(){
     const list = allLiveSessions
@@ -1395,6 +1418,7 @@ async function toggleLiveDone(id){
     try{ await fetch(DB_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)}); }catch(e){}
 }
 
+let _deleteLiveId = null;
 function deleteLive(id, title){
     _deleteLiveId = id;
     document.getElementById('confirm-msg').textContent = `Xóa buổi live "${title}"? Không thể hoàn tác.`;
@@ -1414,6 +1438,8 @@ async function confirmDeleteLive(){
 /* ════════════════════════════════════
    TAB 1: QUẢN LÝ BÀI HỌC
 ════════════════════════════════════ */
+let allLessons = [];
+let currentFilter = 'all';
 
 async function loadLessons(){
     const CKEY = 'vlxt_admin_baihoc';
@@ -1426,7 +1452,7 @@ async function loadLessons(){
         document.getElementById('lesson-list-wrap').innerHTML=`<div class="loading-row"><i class="fa-solid fa-spinner fa-spin" style="color:var(--blue);font-size:24px"></i><p style="margin-top:12px;font-size:14px">Đang tải...</p></div>`;
     }
     try{
-        const r = await fetch(DB_URL + '?type=baihoc');
+        const r = await cachedFetch(DB_URL + '?type=baihoc');
         const data = await r.json();
         allLessons = Array.isArray(data) ? data : (data.baihoc || data.data || []);
         aSetCache(CKEY, data);
@@ -1472,6 +1498,8 @@ function groupLessons(rows){
     return subjects;
 }
 
+const COURSE_EMOJI = {'Vật Lý 12':'⚛️','Vật Lý 11':'🔌','Vật Lý 10':'🚀'};
+const SUBJECT_EMOJI = {'Vật Lý 12':'⚛️','Vật Lý 11':'🔌','Vật Lý 10':'🚀'};
 
 // Tách "Luyện đề 2k8 - Vật Lý 12" → {subject:'Vật Lý 12', courseName:'Luyện đề 2k8'}
 function extractSC(khoaHoc){
@@ -1501,82 +1529,6 @@ function updateKhoaOptions(){
     dl.innerHTML = [...courses].map(n=>`<option value="${esc(n)}">`).join('');
 }
 
-// ── KHOACONFIG: Cấu hình đóng/mở khoá ─────────────────────────
-
-async function loadKhoaConfig(){
-    try{
-        const r = await fetch(DB_URL + '?type=khoaconfig&t=' + Date.now());
-        const d = await r.json();
-        (d.data||[]).forEach(c => { KHOACONFIG[c.khoaHoc] = { trangThai: c.trangThai||'open', loaiTK: c.loaiTK||'free,vip,premium', hienThi: (c.hienThi!==undefined?c.hienThi:c[''])!=='false' }; });
-    }catch(e){ console.warn('loadKhoaConfig error:', e); }
-}
-
-async function saveKhoaConfig(fullName){
-    const cfg = KHOACONFIG[fullName] || { trangThai:'open', loaiTK:'free,vip,premium' };
-    const payload = { action:'saveKhoaConfig', adminKey: getAdminKey(), khoaHoc: fullName, trangThai: cfg.trangThai, loaiTK: cfg.loaiTK, hienThi: cfg.hienThi!==false ? 'true' : 'false' };
-    try{ await fetch(DB_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)}); }catch(e){}
-    toast('✅ Đã lưu cấu hình khoá: ' + (fullName.split(' - ')[0]||fullName), 'ok');
-}
-
-function renderLockBtn(fullName){
-    const cfg = KHOACONFIG[fullName];
-    const closed = cfg && cfg.trangThai === 'closed';
-    const cls = closed ? 'lock' : 'unlock';
-    const ico = closed ? '🔒' : '🔓';
-    const lbl = closed ? 'Đang đóng' : 'Đang mở';
-    const fn = fullName.replace(/'/g,"&#39;");
-    return `<button class="course-action-btn ${cls}" onclick="toggleKhoaStatus('${fn}')">${ico} ${lbl}</button>`;
-}
-
-function renderTierChips(fullName){
-    const cfg = KHOACONFIG[fullName] || {};
-    const allowed = (cfg.loaiTK||'free,vip,premium').split(',').map(s=>s.trim());
-    const fn = fullName.replace(/'/g,"&#39;");
-    return ['free','vip','premium'].map(t=>{
-        const on = allowed.includes(t) ? 'on' : '';
-        const label = t==='free'?'Miễn phí':t==='vip'?'⭐ VIP':'💎 Premium';
-        return `<span class="tier-chip ${t} ${on}" title="Click để bật/tắt" onclick="toggleTier('${fn}','${t}')">${label}</span>`;
-    }).join('');
-}
-
-function renderVisibilityBtn(fullName){
-    const cfg = KHOACONFIG[fullName] || {};
-    const visible = cfg.hienThi !== false;
-    const fn = fullName.replace(/'/g,"&#39;");
-    return `<button class="course-action-btn ${visible?'vis-on':'vis-off'}" onclick="toggleHienThi('${fn}')">
-        <i class="fa-solid ${visible?'fa-eye':'fa-eye-slash'}"></i> ${visible?'Hiển thị':'Đang ẩn'}
-    </button>`;
-}
-
-function toggleHienThi(fullName){
-    if(!KHOACONFIG[fullName]) KHOACONFIG[fullName] = { trangThai:'open', loaiTK:'free,vip,premium', hienThi:true };
-    KHOACONFIG[fullName].hienThi = !KHOACONFIG[fullName].hienThi;
-    saveKhoaConfig(fullName);
-    renderLessonList();
-}
-
-function toggleKhoaStatus(fullName){
-    if(!KHOACONFIG[fullName]) KHOACONFIG[fullName] = { trangThai:'open', loaiTK:'free,vip,premium' };
-    const cur = KHOACONFIG[fullName].trangThai;
-    KHOACONFIG[fullName].trangThai = cur === 'open' ? 'closed' : 'open';
-    saveKhoaConfig(fullName);
-    renderLessonList();
-}
-
-function toggleTier(fullName, tier){
-    if(!KHOACONFIG[fullName]) KHOACONFIG[fullName] = { trangThai:'open', loaiTK:'free,vip,premium' };
-    let tiers = KHOACONFIG[fullName].loaiTK.split(',').map(s=>s.trim()).filter(Boolean);
-    if(tiers.includes(tier)) {
-        tiers = tiers.filter(t=>t!==tier);
-        if(!tiers.length) tiers = ['free']; // luôn giữ ít nhất 1 tier
-    } else {
-        tiers.push(tier);
-    }
-    KHOACONFIG[fullName].loaiTK = tiers.join(',');
-    saveKhoaConfig(fullName);
-    renderLessonList();
-}
-
 function renderCourseBlock(course){
     const total=Object.values(course.chapters).reduce((s,arr)=>s+arr.length,0);
     const fn=esc(course.fullName).replace(/'/g,"&#39;");
@@ -1587,12 +1539,9 @@ function renderCourseBlock(course){
             <span class="course-meta">${Object.keys(course.chapters).length} chương · ${total} bài</span>
             <i class="fa-solid fa-chevron-right course-caret"></i>
         </div>
-        <div class="course-action-bar" id="cab-${fn}">
+        <div class="course-action-bar">
             <button class="course-action-btn edit" onclick="renameCourse('${fn}')"><i class="fa-solid fa-pen"></i> Đổi tên khóa</button>
             <button class="course-action-btn del" onclick="deleteCourse('${fn}')"><i class="fa-solid fa-trash"></i> Xóa khóa này</button>
-            ${renderLockBtn(course.fullName)}
-            ${renderVisibilityBtn(course.fullName)}
-            <div class="tier-row">${renderTierChips(course.fullName)}</div>
         </div>
         <div class="chapter-group">`;
     Object.entries(course.chapters).forEach(([chName,lessons])=>{
@@ -1752,6 +1701,7 @@ Sẽ xóa ${affected.length} bài. Không thể hoàn tác!`)) return;
 }
 
 /* ── Form helpers ── */
+let qCount=0;
 
 function openNewForm(){
     document.getElementById('fp-empty').style.display='none';
@@ -1840,97 +1790,13 @@ function addQuestion(q={}){
         <div class="qb-opt">
             <input type="radio" name="qcorrect-${qi}" value="${L}" ${(q.ans===L||q.correct===L)?'checked':''} title="Chọn làm đáp án đúng">
             <span class="qb-letter">${L}</span>
-            <input type="text" id="qopt-${qi}-${L}" placeholder="Đáp án ${L}..." value="${esc(q[L]||q[L.toLowerCase()]||q['opt'+L]||q['opt'+L.toLowerCase()]||'')}">
+            <input type="text" id="qopt-${qi}-${L}" placeholder="Đáp án ${L}..." value="${esc(q[L]||q[L.toLowerCase()]||'')}">
         </div>`).join('')}
     </div>`;
     document.getElementById('quiz-builder').insertAdjacentHTML('beforeend',html);
 }
 
 function removeQuestion(qi){ document.getElementById('qcard-'+qi)?.remove(); }
-
-/* ════ BANK PICKER ════ */
-let _bpmSel = new Set(); // IDs câu đã chọn trong modal
-
-function openBankPicker(){
-    _bpmSel.clear();
-    document.getElementById('bank-picker-overlay').classList.add('show');
-    document.getElementById('bpm-search').value='';
-    if(!bankLoaded){
-        // Load ngân hàng nếu chưa có
-        document.getElementById('bpm-body').innerHTML='<div class="bpm-empty"><i class="fa-solid fa-spinner fa-spin" style="font-size:24px;color:var(--blue)"></i><p style="margin-top:10px">Đang tải ngân hàng...</p></div>';
-        fetch(DB_URL+'?type=nganhang&t='+Date.now()).then(r=>r.json()).then(j=>{
-            bankData=(j.data||[]).map(q=>({...q, loai:(q.loai||'TN').toString().toUpperCase().trim()}));
-            bankLoaded=true;
-            _fillBpmChuong(); renderBPM();
-        }).catch(e=>{ document.getElementById('bpm-body').innerHTML='<div class="bpm-empty" style="color:var(--red)">Lỗi tải: '+e.message+'</div>'; });
-    } else {
-        _fillBpmChuong(); renderBPM();
-    }
-}
-
-function _fillBpmChuong(){
-    const chuongs=[...new Set(bankData.filter(q=>q.loai==='TN').map(q=>q.chuong).filter(Boolean))].sort();
-    const sel=document.getElementById('bpm-chuong');
-    sel.innerHTML='<option value="">Tất cả chương</option>'+chuongs.map(c=>`<option value="${nhEsc(c)}">${nhEsc(c)}</option>`).join('');
-}
-
-function renderBPM(){
-    const q=(document.getElementById('bpm-search').value||'').toLowerCase();
-    const ch=document.getElementById('bpm-chuong').value;
-    // Chỉ hiện câu TN (A/B/C/D) vì bài học chỉ hỗ trợ loại này
-    const filtered=bankData.filter(item=>
-        item.loai==='TN' &&
-        (!ch||item.chuong===ch) &&
-        (!q||(item.question||'').toLowerCase().includes(q))
-    );
-    const body=document.getElementById('bpm-body');
-    document.getElementById('bpm-count-label').textContent=filtered.length+' câu (chỉ A/B/C/D)';
-    if(!filtered.length){ body.innerHTML='<div class="bpm-empty">Không tìm thấy câu nào.</div>'; return; }
-    body.innerHTML=filtered.slice(0,80).map(item=>{
-        const sel=_bpmSel.has(item.id);
-        const opts=['A','B','C','D'].filter(L=>item['opt'+L]).map(L=>`<span style="margin-right:10px;font-size:12px"><b style="color:${(item.correct||'').trim().toUpperCase()===L?'var(--green)':'inherit'}">${L}.</b> ${nhEsc(item['opt'+L]||'')}</span>`).join('');
-        return `<label class="bpm-item ${sel?'selected':''}" id="bpm-r-${nhEsc(item.id)}" style="display:flex;cursor:pointer">
-            <input type="checkbox" ${sel?'checked':''} onchange="bpmToggle('${nhEsc(item.id)}',this.checked)" onclick="event.stopPropagation()">
-            <div class="bpm-q-text">
-                <div class="bpm-q-meta">
-                    ${item.chuong?`<span class="nh-badge b-ch" style="font-size:10px">${nhEsc(item.chuong)}</span>`:''}
-                    ${item.mucDo?`<span class="nh-badge" style="font-size:10px">${nhEsc(item.mucDo)}</span>`:''}
-                </div>
-                <div style="margin-bottom:5px">${nhSafe(item.question)}</div>
-                <div>${opts}</div>
-            </div>
-        </label>`;
-    }).join('');
-    nhKatex(body);
-    updateBpmCount();
-}
-
-function bpmToggle(id,on){
-    if(on) _bpmSel.add(id); else _bpmSel.delete(id);
-    const row=document.getElementById('bpm-r-'+id);
-    if(row) row.classList.toggle('selected',on);
-    updateBpmCount();
-}
-
-function updateBpmCount(){
-    document.getElementById('bpm-sel-count').textContent=_bpmSel.size?`${_bpmSel.size} câu chọn`:'0 câu chọn';
-    document.getElementById('bpm-add-btn').disabled=_bpmSel.size===0;
-}
-
-function addFromBankPicker(){
-    if(!_bpmSel.size){ toast('Chưa chọn câu nào!','err'); return; }
-    const chosen=bankData.filter(q=>_bpmSel.has(q.id)&&q.loai==='TN');
-    chosen.forEach(q=>{
-        addQuestion({ q:q.question, A:q.optA||'', B:q.optB||'', C:q.optC||'', D:q.optD||'', ans:(q.correct||'').trim().toUpperCase() });
-    });
-    toast(`<i class="fa-solid fa-circle-check"></i> Đã thêm ${chosen.length} câu từ ngân hàng!`,'ok');
-    closeBankPicker();
-}
-
-function closeBankPicker(){
-    document.getElementById('bank-picker-overlay').classList.remove('show');
-    _bpmSel.clear();
-}
 
 function getQuestionsFromForm(){
     const cards=document.querySelectorAll('#quiz-builder .qb-card');
@@ -1974,8 +1840,7 @@ async function saveLessonForm(){
     const btn=document.getElementById('btn-save-lesson');
     btn.disabled=true; btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Đang lưu...';
     try{
-        const _r=await fetch(DB_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
-        await _r.json().catch(()=>{});
+        await fetch(DB_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
         try{localStorage.removeItem('vlxt_lessons_cache');}catch(e){}
         toast('<i class="fa-solid fa-circle-check"></i> Đã lưu bài giảng lên Google Sheets!','ok');
         showSyncBadge();
@@ -1996,6 +1861,7 @@ async function saveLessonForm(){
 }
 
 /* ── Delete ── */
+let pendingDelete='';
 function confirmDelete(key){
     pendingDelete=key;
     const name=pendingDelete.split('|||')[2]||'bài này';
@@ -2010,8 +1876,7 @@ async function doDelete(){
     const parts=keyToDelete.split('|||');
     const payload={action:'deleteBaiHoc',KhoaHoc:parts[0]||'',Chuong:parts[1]||'',TenBai:parts[2]||''};
     try{
-        const _r=await fetch(DB_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
-        await _r.json().catch(()=>{});
+        await fetch(DB_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
         try{localStorage.removeItem('vlxt_lessons_cache');}catch(e){}
         allLessons=allLessons.filter(r=>{
             const k=(r.KhoaHoc||r.khoahoc||r.course||'')+'|||'+(r.Chuong||r.chuong||r.chapter||'')+'|||'+(r.TenBai||r.tenbai||r.title||r.ten||'');
@@ -2025,6 +1890,7 @@ async function doDelete(){
 /* ════════════════════════════════════
    TAB 3: KẾT QUẢ THI
 ════════════════════════════════════ */
+let allScores=[], filteredScores=[];
 
 async function loadScores(){
     const CKEY = 'vlxt_admin_diemthi';
@@ -2037,7 +1903,7 @@ async function loadScores(){
         document.getElementById('scores-table-body').innerHTML=`<div class="loading-row"><i class="fa-solid fa-spinner fa-spin" style="color:var(--blue);font-size:22px"></i><p style="margin-top:10px;font-size:14px">Đang tải...</p></div>`;
     }
     try{
-        const r=await fetch(DB_URL+'?type=diemthi');
+        const r=await cachedFetch(DB_URL+'?type=diemthi');
         const data=await r.json();
         allScores=Array.isArray(data)?data:(data.diemthi||data.bangvang||data.data||[]);
         aSetCache(CKEY, data);
@@ -2194,6 +2060,7 @@ function setStatus2(html,isErr){
     s.innerHTML=html;
 }
 
+let parsedQuestions=[];
 
 async function handleFile(file){
     document.getElementById('preview-wrap2').style.display='none';
@@ -2363,6 +2230,8 @@ function wmfToDataUri(u8){
 }
 function compressUri(uri){return new Promise(resolve=>{const img=new Image();img.onload=()=>{const MW=640;let w=img.naturalWidth,h=img.naturalHeight;if(!w||!h){resolve(uri);return;}if(w>MW){h=Math.round(h*MW/w);w=MW;}const c=document.createElement('canvas');c.width=w;c.height=h;const ctx=c.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);ctx.drawImage(img,0,0,w,h);try{const out=c.toDataURL('image/jpeg',.75);resolve(out.length<uri.length?out:uri);}catch(e){resolve(uri);}}; img.onerror=()=>resolve(uri);img.src=uri;});}
 
+const TL={mc:'A/B/C/D',tf:'Đúng/Sai',short:'Trả lời ngắn'};
+const SL={A:'a)',B:'b)',C:'c)',D:'d)'};
 
 function renderPreview2(skipped){
     const wrap=document.getElementById('preview-wrap2'),preview=document.getElementById('preview2');
@@ -2400,6 +2269,7 @@ function renderPreview2(skipped){
    EXAM MANAGEMENT
 ═══════════════════════════════════════════ */
 
+let examListData = [];
 
 async function loadExamList() {
     const CKEY = 'vlxt_admin_soande';
@@ -2410,7 +2280,7 @@ async function loadExamList() {
         if(aFresh(cached)) return;
     }
     try {
-        const r = await fetch(DB_URL + '?type=danhsachde');
+        const r = await cachedFetch(DB_URL + '?type=danhsachde');
         const j = await r.json();
         examListData = (j.ok && j.data) ? j.data : [];
         aSetCache(CKEY, examListData);
@@ -2516,6 +2386,7 @@ async function toggleExamStatus(examId, curStatus) {
     setTimeout(loadExamList,1500);
 }
 
+let _pendingDeleteExamId = null;
 function confirmDeleteExam(examId, tenDe) {
     _pendingDeleteExamId = examId;
     document.getElementById('confirm-title').textContent = 'Xóa đề "' + tenDe + '"?';
@@ -2584,6 +2455,7 @@ function resetAll(){
 /* ════════════════════════════════════
    TAB: NGÂN HÀNG CÂU HỎI
 ════════════════════════════════════ */
+let bankData=[], bankLoaded=false, bankParsed=[], bankSel=new Set();
 
 /* Chuyển link Google Drive bất kỳ thành link ảnh hiển thị được */
 function driveImg(url){
@@ -2616,7 +2488,7 @@ async function loadBank(force){
     const list=document.getElementById('nh-list');
     list.innerHTML='<div class="loading-row" style="padding:40px"><i class="fa-solid fa-spinner fa-spin" style="color:var(--blue);font-size:22px"></i><p style="margin-top:10px;font-size:14px">Đang tải ngân hàng...</p></div>';
     try{
-        const r=await fetch(DB_URL+'?type=nganhang&t='+Date.now());
+        const r=await cachedFetch(DB_URL+'?type=nganhang&t='+Date.now());
         const j=await r.json();
         bankData=(j.data||[]).map(q=>{q={...q, loai:(q.loai||'TN').toString().toUpperCase().trim()}; if(!q.phanLoai) q.phanLoai=classifyTaxonomy(q); return q;});
         bankLoaded=true; bankSel.clear();
@@ -2654,6 +2526,7 @@ function bankFiltered(){
         (!fp||q.phanLoai===fp)&&
         (!fs||((q.question||'')+(q.deBaiChung||'')).toLowerCase().includes(fs)) );
 }
+const NH_LOAI_TEN={TN:'Trắc nghiệm',DS:'Đúng/Sai',TLN:'Trả lời ngắn'};
 function bankRowHtml(q,withCheck){
     const sel=bankSel.has(q.id);
     const sub=['A','B','C','D'];
@@ -2833,23 +2706,131 @@ function toggleTheme(){document.body.classList.toggle('dark');localStorage.setIt
 if(localStorage.getItem('vlxt_theme')==='dark')document.body.classList.add('dark');
 </script>
 
-<!-- ══════ BANK PICKER MODAL ══════ -->
-<div id="bank-picker-overlay">
-    <div id="bank-picker-modal">
-        <div class="bpm-head">
-            <i class="fa-solid fa-database" style="color:var(--blue);font-size:18px"></i>
-            <h3>Chọn câu từ Ngân hàng</h3>
-            <span id="bpm-sel-count" style="font-size:13px;font-weight:700;color:var(--blue)">0 câu chọn</span>
-            <button onclick="closeBankPicker()" style="background:none;border:none;font-size:18px;color:var(--gray2);cursor:pointer;margin-left:4px"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <div class="bpm-filters">
-            <input id="bpm-search" placeholder="🔍 Tìm câu hỏi..." oninput="renderBPM()">
-            <select id="bpm-chuong" onchange="renderBPM()"><option value="">Tất cả chương</option></select>
-        </div>
-        <div class="bpm-body" id="bpm-body"></div>
-        <div class="bpm-foot">
-            <span class="bpm-count" id="bpm-count-label"></span>
-            <button onclick="closeBankPicker()" style="padding:8px 16px;border:1.5px solid var(--border);border-radius:8px;background:transparent;color:var(--text);font-size:13px;font-weight:600;cursor:pointer">Huỷ</button>
-            <button id="bpm-add-btn" onclick="addFromBankPicker()" style="padding:8px 18px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px"><i class="fa-solid fa-plus"></i> Thêm vào bài</button>
-        </div>
-    </div>
+<!-- ══ FIREBASE SDK cho Quản lý Live ══ -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+/* ════ QUẢN LÝ LIVE (Firebase) ════ */
+const QL_FIREBASE_CONFIG = {
+    apiKey: "AIzaSyBr6BjY8iik-vRbbnyG0XSf6yNYaDTjbkM",
+    authDomain: "vatly-xuantruong-live.firebaseapp.com",
+    databaseURL: "https://vatly-xuantruong-live-default-rtdb.firebaseio.com",
+    projectId: "vatly-xuantruong-live",
+    storageBucket: "vatly-xuantruong-live.firebasestorage.app",
+    messagingSenderId: "395446338507",
+    appId: "1:395446338507:web:74a1dd47e81350e2a7ec4e"
+};
+
+let qlDb = null;
+
+function qlInit() {
+    try {
+        if (!firebase.apps.length) {
+            firebase.initializeApp(QL_FIREBASE_CONFIG);
+        }
+        qlDb = firebase.database();
+
+        // Theo dõi config live realtime
+        qlDb.ref('live_config/current').on('value', snap => {
+            const cfg = snap.val() || {};
+            const badge = document.getElementById('ql-status-badge');
+            const cur   = document.getElementById('ql-current-video');
+            if (!badge) return;
+            if (cfg.videoId && cfg.isLive) {
+                badge.innerHTML = '<span style="width:8px;height:8px;background:#dc2626;border-radius:50%;display:inline-block;animation:livePulse 1.2s ease-in-out infinite"></span> Đang phát';
+                badge.style.background = 'rgba(220,38,38,.1)';
+                badge.style.color = '#dc2626';
+                cur.innerHTML = '▶ <a href="https://youtu.be/' + cfg.videoId + '" target="_blank" style="color:var(--blue)">' + (cfg.title || cfg.videoId) + '</a>';
+            } else {
+                badge.innerHTML = '<span style="width:8px;height:8px;background:#888;border-radius:50%;display:inline-block"></span> Offline';
+                badge.style.background = '#f0f0f0';
+                badge.style.color = '#555';
+                cur.textContent = 'Không có buổi live nào đang phát';
+            }
+        });
+
+        // Đếm viewer
+        qlDb.ref('live_sessions/main/viewers').on('value', snap => {
+            const el = document.getElementById('ql-viewer-count');
+            if (el) el.textContent = snap.numChildren();
+        });
+
+    } catch(e) {
+        const errEl = document.getElementById('ql-firebase-error');
+        if (errEl) {
+            errEl.style.display = 'block';
+            document.getElementById('ql-error-msg').textContent = 'Lỗi Firebase: ' + e.message;
+        }
+    }
+}
+
+// Trích VIDEO ID từ nhiều dạng URL YouTube
+function qlExtractId(input) {
+    if (!input) return '';
+    input = input.trim();
+    // Dạng: https://youtu.be/ID
+    let m = input.match(/youtu\.be\/([\w-]{11})/);
+    if (m) return m[1];
+    // Dạng: youtube.com/watch?v=ID
+    m = input.match(/[?&]v=([\w-]{11})/);
+    if (m) return m[1];
+    // Dạng: youtube.com/live/ID
+    m = input.match(/\/live\/([\w-]{11})/);
+    if (m) return m[1];
+    // Nếu đã là ID thuần (11 ký tự)
+    if (/^[\w-]{11}$/.test(input)) return input;
+    return '';
+}
+
+function qlPreviewUrl(val) {
+    const id = qlExtractId(val);
+    const preview = document.getElementById('ql-id-preview');
+    const idText  = document.getElementById('ql-id-text');
+    if (id) {
+        idText.textContent = id;
+        preview.style.display = 'block';
+    } else {
+        preview.style.display = 'none';
+    }
+}
+
+function qlStartLive() {
+    if (!qlDb) { alert('Chưa kết nối Firebase!'); return; }
+    const raw   = document.getElementById('ql-url').value;
+    const title = document.getElementById('ql-title').value.trim() || 'Vật Lý Xuân Trường — Live Dạy Học';
+    const videoId = qlExtractId(raw);
+    if (!videoId) { alert('Không nhận ra Video ID. Hãy dán đúng link YouTube hoặc ID video!'); return; }
+
+    qlDb.ref('live_config/current').set({
+        videoId: videoId,
+        title:   title,
+        isLive:  true,
+        startedAt: Date.now()
+    }).then(() => {
+        showToast('✅ Đã phát live! Học sinh thấy ngay.');
+    }).catch(e => {
+        alert('Lỗi ghi Firebase: ' + e.message);
+    });
+}
+
+function qlStopLive() {
+    if (!qlDb) { alert('Chưa kết nối Firebase!'); return; }
+    qlDb.ref('live_config/current').update({ videoId: '', isLive: false }).then(() => {
+        showToast('⏹ Đã dừng live.');
+    }).catch(e => {
+        alert('Lỗi ghi Firebase: ' + e.message);
+    });
+}
+
+// Khởi động khi trang load
+window.addEventListener('load', qlInit);
+
+// Thêm keyframe cho badge pulse vào <head>
+(function(){
+    const s = document.createElement('style');
+    s.textContent = '@keyframes livePulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.6}}';
+    document.head.appendChild(s);
+})();
+</script>
+</body>
+</html>
