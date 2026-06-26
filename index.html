@@ -546,6 +546,9 @@
     <button class="tab-btn" onclick="switchTab('quanlylive')" id="tab-quanlylive-btn">
         <i class="fa-solid fa-tower-broadcast"></i> Điều khiển Live
     </button>
+    <button class="tab-btn" onclick="switchTab('taikhoan')" id="tab-taikhoan-btn">
+        <i class="fa-solid fa-users"></i> Tài khoản HS
+    </button>
 </div>
 
 <!-- ════════════════════════════════════
@@ -1079,7 +1082,7 @@ function aFresh(c){ return c && (Date.now()-c.t < ADMIN_CACHE_TTL); }
 /* ════════════════════════════════════
    KHOÁ GHI: tự gắn mật khẩu admin vào mọi thao tác ghi
 ════════════════════════════════════ */
-const ADMIN_WRITE_ACTIONS = ['savebaihoc','deletebaihoc','savequestions','savenganhang','deletenganhang','updatenganhang','updatebaihocvideo','saveexam','deleteexam','savelivesession','deletelivesession'];
+const ADMIN_WRITE_ACTIONS = ['savebaihoc','deletebaihoc','savequestions','savenganhang','deletenganhang','updatenganhang','updatebaihocvideo','saveexam','deleteexam','savelivesession','deletelivesession','setvipstatus'];
 function getAdminKey(){ return localStorage.getItem('adminKey') || ''; }
 (function(){
     const _fetch = window.fetch.bind(window);
@@ -1138,6 +1141,7 @@ function switchTab(name){
     if(name==='nganhang' && !bankLoaded) loadBank();
     if(name==='lichlive' && !liveLoaded) loadLiveSessions();
     if(name==='quanlylive') initLiveControl();
+    if(name==='taikhoan' && !tkLoaded) loadTaiKhoan();
 }
 
 /* ════════════════════════════════════
@@ -2696,6 +2700,179 @@ async function bankHandleFile(file){
 </div>
 </div>
 </div>
+
+
+<!-- ════════════════════════════════════
+     TAB 7: TÀI KHOẢN HỌC SINH
+════════════════════════════════════ -->
+<div class="tab-content" id="tab-taikhoan">
+<div class="wrap" style="max-width:1000px">
+<div class="lm-toolbar" style="margin-bottom:20px">
+  <h2><i class="fa-solid fa-users" style="color:var(--blue);font-size:20px"></i> Quản lý Tài khoản Học sinh</h2>
+  <div style="display:flex;gap:10px;align-items:center">
+    <input type="text" id="tk-search" placeholder="🔍 Tìm tên hoặc SĐT..." oninput="filterTK()" style="padding:8px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;width:220px;font-family:inherit;outline:none">
+    <button class="btn-new" onclick="loadTaiKhoan(true)" style="min-width:100px"><i class="fa-solid fa-rotate"></i> Làm mới</button>
+  </div>
+</div>
+
+<!-- Stats nhanh -->
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px" id="tk-stats">
+  <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:14px;text-align:center">
+    <div id="tk-total" style="font-size:26px;font-weight:900;color:var(--blue)">—</div>
+    <div style="font-size:12px;color:var(--gray)">Tổng tài khoản</div>
+  </div>
+  <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:14px;text-align:center">
+    <div id="tk-vip" style="font-size:26px;font-weight:900;color:#d97706">—</div>
+    <div style="font-size:12px;color:var(--gray)">Đang VIP trial</div>
+  </div>
+  <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:14px;text-align:center">
+    <div id="tk-free" style="font-size:26px;font-weight:900;color:var(--gray)">—</div>
+    <div style="font-size:12px;color:var(--gray)">Tài khoản Free</div>
+  </div>
+  <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:14px;text-align:center">
+    <div id="tk-premium" style="font-size:26px;font-weight:900;color:#7c3aed">—</div>
+    <div style="font-size:12px;color:var(--gray)">Premium</div>
+  </div>
+</div>
+
+<!-- Danh sách -->
+<div style="background:var(--bg);border:1.5px solid var(--border);border-radius:12px;overflow:hidden">
+  <div id="tk-list-wrap" style="overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead>
+        <tr style="background:var(--bg2);border-bottom:1.5px solid var(--border)">
+          <th style="padding:10px 14px;text-align:left;font-weight:700">Họ tên</th>
+          <th style="padding:10px 14px;text-align:left;font-weight:700">SĐT</th>
+          <th style="padding:10px 14px;text-align:left;font-weight:700">Lớp</th>
+          <th style="padding:10px 14px;text-align:left;font-weight:700">Trạng thái</th>
+          <th style="padding:10px 14px;text-align:left;font-weight:700">Hết hạn</th>
+          <th style="padding:10px 14px;text-align:center;font-weight:700">Thao tác</th>
+        </tr>
+      </thead>
+      <tbody id="tk-list"></tbody>
+    </table>
+  </div>
+  <div id="tk-empty" style="display:none;text-align:center;padding:40px;color:var(--gray2)">Chưa có tài khoản nào</div>
+</div>
+
+<!-- Modal nâng cấp -->
+<div id="tk-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center">
+  <div style="background:var(--bg);border-radius:16px;padding:28px;width:360px;max-width:95vw;box-shadow:0 20px 60px rgba(0,0,0,.3)">
+    <h3 style="font-size:16px;font-weight:800;margin-bottom:16px">⭐ Nâng cấp tài khoản</h3>
+    <div style="margin-bottom:12px">
+      <div style="font-size:12px;color:var(--gray);margin-bottom:5px">Học sinh</div>
+      <div id="tk-modal-name" style="font-weight:700;font-size:15px"></div>
+      <div id="tk-modal-sdt" style="font-size:13px;color:var(--gray);margin-top:2px"></div>
+    </div>
+    <div style="margin-bottom:12px">
+      <label style="font-size:12px;font-weight:600;color:var(--gray);display:block;margin-bottom:5px">Loại tài khoản</label>
+      <select id="tk-modal-loai" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;outline:none">
+        <option value="vip">⭐ VIP</option>
+        <option value="premium">💎 Premium</option>
+        <option value="free">🆓 Miễn phí (hạ cấp)</option>
+      </select>
+    </div>
+    <div style="margin-bottom:18px">
+      <label style="font-size:12px;font-weight:600;color:var(--gray);display:block;margin-bottom:5px">Số ngày</label>
+      <input type="number" id="tk-modal-days" value="30" min="1" max="365" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;outline:none">
+    </div>
+    <div style="display:flex;gap:10px">
+      <button onclick="confirmSetVip()" style="flex:1;padding:11px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">Xác nhận</button>
+      <button onclick="closeTkModal()" style="padding:11px 16px;background:var(--bg2);border:1.5px solid var(--border);color:var(--gray);border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">Huỷ</button>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<script>
+/* ════ TÀI KHOẢN HỌC SINH ════ */
+let allTK = [];
+let tkLoaded = false;
+let tkEditSdt = null;
+
+async function loadTaiKhoan(force) {
+  if (!force && tkLoaded) return;
+  document.getElementById('tk-list').innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--gray2)">Đang tải...</td></tr>';
+  try {
+    const url = GAS_URL + '?type=danhsachtaikhoan&adminKey=' + encodeURIComponent(ADMIN_KEY);
+    const r = await fetch(url);
+    const data = await r.json();
+    allTK = Array.isArray(data) ? data : [];
+    tkLoaded = true;
+    renderTK(allTK);
+  } catch(e) {
+    document.getElementById('tk-list').innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--red)">Lỗi tải dữ liệu: ' + e.message + '</td></tr>';
+  }
+}
+
+function filterTK() {
+  const q = document.getElementById('tk-search').value.toLowerCase().trim();
+  const filtered = q ? allTK.filter(r => (r.hoten||'').toLowerCase().includes(q) || (r.sdt||'').includes(q)) : allTK;
+  renderTK(filtered);
+}
+
+function renderTK(list) {
+  const tbody = document.getElementById('tk-list');
+  const now = Date.now();
+  let nVip=0, nFree=0, nPremium=0;
+
+  if (!list.length) {
+    tbody.innerHTML = '';
+    document.getElementById('tk-empty').style.display = 'block';
+  } else {
+    document.getElementById('tk-empty').style.display = 'none';
+    tbody.innerHTML = list.map(r => {
+      const loai = r.loaiTK || 'vip';
+      const exp  = r.trialExpiry ? Number(r.trialExpiry) : 0;
+      const msLeft = exp ? (exp - now) : 0;
+      const dLeft = Math.max(0, Math.ceil(msLeft / 86400000));
+
+      let badge, expTxt;
+      if (loai === 'premium') { badge = '<span style="background:rgba(124,58,237,.1);color:#7c3aed;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px">💎 Premium</span>'; nPremium++; expTxt = 'Vĩnh viễn'; }
+      else if (loai === 'vip' && msLeft > 0) { badge = '<span style="background:rgba(217,119,6,.1);color:#d97706;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px">⭐ VIP Trial</span>'; nVip++; expTxt = dLeft + ' ngày còn lại'; }
+      else { badge = '<span style="background:rgba(107,114,128,.1);color:#888;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px">🆓 Free</span>'; nFree++; expTxt = loai==='vip' ? 'Đã hết hạn' : '—'; }
+
+      return `<tr style="border-bottom:1px solid var(--border);transition:background .1s" onmouseover="this.style.background='var(--bg2)'" onmouseout="this.style.background=''">
+        <td style="padding:10px 14px;font-weight:600">${esc(r.hoten||'—')}</td>
+        <td style="padding:10px 14px;font-family:'DM Mono',monospace;font-size:12px">${esc(r.sdt||'—')}</td>
+        <td style="padding:10px 14px">${esc(r.lop||'—')}</td>
+        <td style="padding:10px 14px">${badge}</td>
+        <td style="padding:10px 14px;font-size:12px;color:var(--gray2)">${expTxt}</td>
+        <td style="padding:10px 14px;text-align:center">
+          <button onclick="openTkModal('${esc(r.sdt)}','${esc(r.hoten)}')" style="font-size:12px;padding:5px 12px;background:var(--blue);color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:inherit">Nâng cấp</button>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  document.getElementById('tk-total').textContent = allTK.length;
+  document.getElementById('tk-vip').textContent = nVip;
+  document.getElementById('tk-free').textContent = nFree;
+  document.getElementById('tk-premium').textContent = nPremium;
+}
+
+function openTkModal(sdt, hoten) {
+  tkEditSdt = sdt;
+  document.getElementById('tk-modal-name').textContent = hoten;
+  document.getElementById('tk-modal-sdt').textContent = sdt;
+  document.getElementById('tk-modal').style.display = 'flex';
+}
+function closeTkModal() { document.getElementById('tk-modal').style.display = 'none'; }
+
+async function confirmSetVip() {
+  const loaiTK = document.getElementById('tk-modal-loai').value;
+  const days   = Number(document.getElementById('tk-modal-days').value) || 30;
+  try {
+    const r = await fetch(GAS_URL, { method:'POST', mode:'cors', headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify({ action:'setvipstatus', adminKey: ADMIN_KEY, sdt: tkEditSdt, loaiTK, days }) });
+    const d = await r.json();
+    if (d.ok) { toast(d.msg || 'Đã cập nhật!', 'ok'); closeTkModal(); loadTaiKhoan(true); }
+    else toast(d.msg || 'Lỗi!', 'err');
+  } catch(e) { toast('Lỗi: ' + e.message, 'err'); }
+}
+</script>
+
 
 <!-- Firebase SDK cho Live Control -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
