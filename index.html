@@ -2798,7 +2798,7 @@ async function loadTaiKhoan(force) {
     const url = DB_URL + '?type=danhsachtaikhoan&adminKey=' + encodeURIComponent(getAdminKey());
     const r = await fetch(url);
     const data = await r.json();
-    allTK = Array.isArray(data) ? data : [];
+    allTK = Array.isArray(data) ? data : (data && Array.isArray(data.data) ? data.data : []);
     tkLoaded = true;
     renderTK(allTK);
   } catch(e) {
