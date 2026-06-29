@@ -1072,6 +1072,7 @@
 ════════════════════════════════════ */
 const ADMIN_PASSWORD_HASH = "e86dccf7a7186a97b495589dcfd51ee224d83ba82f9372a09e912b0065844d57"; // SHA-256 của mật khẩu
 const DB_URL = "https://script.google.com/macros/s/AKfycbyqejp4SzgwNsJb3QrTP76C5-6K2MYqv5T1CzPyi6KUOEEsC7GKQLCnR07i0DNbqKBL/exec";
+const GAS_ADMIN_KEY = 'vlxt_admin_2025'; // API key cố định gửi GAS (khác với admin login pw)
 
 /* ════ CACHE TỐC ĐỘ — stale-while-revalidate ════ */
 const ADMIN_CACHE_TTL = 5 * 60 * 1000; // 5 phút
@@ -2795,7 +2796,7 @@ async function loadTaiKhoan(force) {
   if (!force && tkLoaded) return;
   document.getElementById('tk-list').innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--gray2)">Đang tải...</td></tr>';
   try {
-    const url = DB_URL + '?type=danhsachtaikhoan&adminKey=' + encodeURIComponent(getAdminKey());
+    const url = DB_URL + '?type=danhsachtaikhoan&adminKey=' + encodeURIComponent(GAS_ADMIN_KEY);
     const r = await fetch(url);
     const data = await r.json();
     allTK = Array.isArray(data) ? data : (data && Array.isArray(data.data) ? data.data : []);
@@ -2865,7 +2866,7 @@ async function confirmSetVip() {
   const days   = Number(document.getElementById('tk-modal-days').value) || 30;
   try {
     const r = await fetch(DB_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'},
-      body: JSON.stringify({ action:'setvipstatus', adminKey: getAdminKey(), sdt: tkEditSdt, loaiTK, days }) });
+      body: JSON.stringify({ action:'setvipstatus', adminKey: GAS_ADMIN_KEY, sdt: tkEditSdt, loaiTK, days }) });
     const d = await r.json();
     if (d.ok) { toast(d.msg || 'Đã cập nhật!', 'ok'); closeTkModal(); loadTaiKhoan(true); }
     else toast(d.msg || 'Lỗi!', 'err');
