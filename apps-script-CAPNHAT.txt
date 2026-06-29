@@ -646,3 +646,33 @@ function updateBaiHocVideo(data) {
   });
   return jsonOut({ ok: true, updated });
 }
+
+
+// ── GET: Đọc Settings toàn trang ─────────────────────────────
+// Trả về { ok:true, data: { key: value, ... } }
+function getSettings() {
+  const sheet = getOrCreate('Settings', ['key', 'value']);
+  const rows  = sheetToJson(sheet);
+  const result = {};
+  rows.forEach(r => { if (r.key) result[String(r.key)] = r.value !== undefined ? r.value : ''; });
+  return jsonOut({ ok: true, data: result });
+}
+
+// ── POST: Lưu 1 Setting ───────────────────────────────────────
+// data: { adminKey, key, value }
+// Ví dụ: { adminKey:'vlxt_admin_2025', key:'currentTeachingLesson', value:'KhoaHoc|||Chuong|||TenBai' }
+function saveSetting(data) {
+  const ADMIN_KEY = PropertiesService.getScriptProperties().getProperty('ADMIN_KEY') || 'vlxt_admin_2025';
+  if (String(data.adminKey || '').trim() !== ADMIN_KEY) return jsonOut({ ok: false, msg: 'Unauthorized' });
+  if (!data.key) return jsonOut({ ok: false, msg: 'Thiếu key' });
+
+  const sheet = getOrCreate('Settings', ['key', 'value']);
+  const rows  = sheetToJson(sheet);
+  const existing = rows.find(r => String(r.key) === String(data.key));
+  if (existing) {
+    sheet.getRange(existing._rowIndex, 1, 1, 2).setValues([[data.key, data.value !== undefined ? data.value : '']]);
+  } else {
+    sheet.appendRow([data.key, data.value !== undefined ? data.value : '']);
+  }
+  return jsonOut({ ok: true });
+}

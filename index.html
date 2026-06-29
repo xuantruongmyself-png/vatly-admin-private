@@ -181,6 +181,12 @@
         .li-btn { width:30px; height:30px; border-radius:7px; border:1.5px solid var(--border); background:var(--bg); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:13px; transition:all .15s; }
         .li-btn.edit:hover { border-color:var(--blue); color:var(--blue); background:rgba(11,132,243,.05); }
         .li-btn.del:hover { border-color:var(--red); color:var(--red); background:rgba(220,38,38,.05); }
+        .li-btn.star { color:var(--gray2); }
+        .li-btn.star:hover { border-color:#f59e0b; color:#f59e0b; background:rgba(245,158,11,.06); }
+        .li-btn.star.active { border-color:#f59e0b; color:#f59e0b; background:rgba(245,158,11,.12); }
+        .lesson-item.teaching { background:rgba(245,158,11,.05); border-left:3px solid #f59e0b; }
+        .li-teaching-badge { font-size:10px; font-weight:700; padding:2px 8px; border-radius:100px;
+            background:rgba(245,158,11,.15); color:#f59e0b; white-space:nowrap; }
         .empty-list { text-align:center; padding:48px 20px; color:var(--gray2); }
         .empty-list i { font-size:36px; opacity:.4; margin-bottom:12px; }
 
@@ -1157,7 +1163,7 @@ function todayStr(){ return new Date().toLocaleDateString('vi-VN'); }
 /* ════════════════════════════════════
    INIT
 ════════════════════════════════════ */
-function initAdmin(){ loadLessons(); }
+function initAdmin(){ loadSettings().then(()=>loadLessons()); }
 
 /* ════════════════════════════════════
    TAB 5: LỊCH LIVE
@@ -1364,6 +1370,36 @@ async function confirmDeleteLive(){
 ════════════════════════════════════ */
 let allLessons = [];
 let currentFilter = 'all';
+let currentTeachingLesson = ''; // key "KhoaHoc|||Chuong|||TenBai" của bài thầy đang dạy
+
+async function loadSettings(){
+    try{
+        const r = await fetch(DB_URL + '?type=settings');
+        const d = await r.json();
+        if(d.ok && d.data) currentTeachingLesson = d.data.currentTeachingLesson || '';
+    }catch(e){ console.warn('Không tải được settings:', e); }
+}
+
+async function markTeachingLesson(key){
+    const prev = currentTeachingLesson;
+    currentTeachingLesson = (currentTeachingLesson === key) ? '' : key; // toggle
+    renderLessonList();
+    try{
+        await fetch(DB_URL, { method:'POST', body: JSON.stringify({
+            action: 'savesetting',
+            adminKey: getAdminKey(),
+            key: 'currentTeachingLesson',
+            value: currentTeachingLesson
+        })});
+        toast(currentTeachingLesson
+            ? '⭐ Đã đánh dấu bài đang dạy'
+            : '☆ Đã bỏ đánh dấu', 'ok');
+    }catch(e){
+        currentTeachingLesson = prev;
+        renderLessonList();
+        toast('Lỗi lưu setting', 'err');
+    }
+}
 
 async function loadLessons(){
     const CKEY = 'vlxt_admin_baihoc';
@@ -1480,16 +1516,20 @@ function renderCourseBlock(course){
             const hasGiai=!!ytId(l.videogiai)||!!(l.videogiai&&l.videogiai.includes('drive.google.com'));
             let baitapArr=[]; try{baitapArr=JSON.parse(l.baitap||'[]');}catch(e){}
             const key=`${l.khoa}|||${l.chuong}|||${l.ten}`;
-            html+=`<div class="lesson-item">
+            const isTeaching = (currentTeachingLesson === key);
+            const safeKey = esc(key).replace(/'/g,"&#39;");
+            html+=`<div class="lesson-item${isTeaching?' teaching':''}">
                 <div class="li-name">${esc(l.ten)}</div>
                 <div class="li-badges">
+                    ${isTeaching?'<span class="li-teaching-badge">⭐ Đang dạy</span>':''}
                     ${hasVid?'<span class="li-badge li-vid"><i class="fa-solid fa-play" style="font-size:9px"></i> Video</span>':'<span class="li-badge li-novid">Chưa có video</span>'}
                     ${hasGiai?'<span class="li-badge li-vid"><i class="fa-solid fa-lightbulb" style="font-size:9px"></i> Chữa</span>':''}
                     ${baitapArr.length?`<span class="li-badge li-quiz"><i class="fa-solid fa-pen-to-square" style="font-size:9px"></i> ${baitapArr.length} câu</span>`:''}
                 </div>
                 <div class="li-actions">
-                    <button class="li-btn edit" title="Sửa bài" onclick="openEditForm('${esc(key).replace(/'/g,"&#39;")}')"><i class="fa-solid fa-pen"></i></button>
-                    <button class="li-btn del" title="Xóa bài" onclick="confirmDelete('${esc(key).replace(/'/g,"&#39;")}')"><i class="fa-solid fa-trash"></i></button>
+                    <button class="li-btn star${isTeaching?' active':''}" title="${isTeaching?'Bỏ đánh dấu đang dạy':'Đánh dấu đang dạy đến đây'}" onclick="markTeachingLesson('${safeKey}')">⭐</button>
+                    <button class="li-btn edit" title="Sửa bài" onclick="openEditForm('${safeKey}')"><i class="fa-solid fa-pen"></i></button>
+                    <button class="li-btn del" title="Xóa bài" onclick="confirmDelete('${safeKey}')"><i class="fa-solid fa-trash"></i></button>
                 </div>
             </div>`;
         });
