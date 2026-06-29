@@ -1385,19 +1385,21 @@ async function markTeachingLesson(key){
     currentTeachingLesson = (currentTeachingLesson === key) ? '' : key; // toggle
     renderLessonList();
     try{
-        await fetch(DB_URL, { method:'POST', body: JSON.stringify({
+        const r = await fetch(DB_URL, { method:'POST', body: JSON.stringify({
             action: 'savesetting',
-            adminKey: getAdminKey(),
+            adminKey: ADMIN_KEY,
             key: 'currentTeachingLesson',
             value: currentTeachingLesson
         })});
+        const d = await r.json();
+        if(!d.ok){ throw new Error(d.msg || 'GAS error'); }
         toast(currentTeachingLesson
             ? '⭐ Đã đánh dấu bài đang dạy'
             : '☆ Đã bỏ đánh dấu', 'ok');
     }catch(e){
         currentTeachingLesson = prev;
         renderLessonList();
-        toast('Lỗi lưu setting', 'err');
+        toast('Lỗi lưu setting: ' + e.message, 'err');
     }
 }
 
