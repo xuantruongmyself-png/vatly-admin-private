@@ -1413,6 +1413,15 @@ async function saveKhoaConfigField(fullName, field, value){
     }catch(e){ toast('Lỗi lưu config: ' + e.message, 'err'); return false; }
 }
 
+function toggleTheme(){
+    document.body.classList.toggle('dark');
+    localStorage.setItem('admin_theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    const btn = document.querySelector('.theme-toggle i');
+    if(btn){ btn.className = document.body.classList.contains('dark') ? 'fa-solid fa-sun' : 'fa-solid fa-circle-half-stroke'; }
+}
+// Auto-apply saved theme on load
+(function(){ if(localStorage.getItem('admin_theme')==='dark') document.body.classList.add('dark'); })();
+
 async function loadSettings(){
     try{
         const r = await fetch(DB_URL + '?type=settings');
@@ -1457,16 +1466,19 @@ async function toggleKhaiGiang(fullName){
 }
 
 async function moveCourseOrder(fullName, dir){
-    // Lấy danh sách tất cả khoá theo thứ tự hiện tại
+    // Chỉ thao tác khoá trong cùng môn học (subject)
+    const targetSubject = extractSC(fullName).subject || fullName;
     const subjects = groupLessons(allLessons);
-    const allCourses = [];
-    Object.values(subjects).forEach(s => Object.keys(s.courses).forEach(fn => {
+    const subjectData = subjects[targetSubject];
+    if(!subjectData) return;
+    const allCourses = Object.keys(subjectData.courses).map(fn => {
         const cfg = ADMIN_KHOACONFIG[fn] || { thuTu:999 };
-        allCourses.push({ fullName: fn, thuTu: cfg.thuTu });
-    }));
+        return { fullName: fn, thuTu: typeof cfg.thuTu === 'number' ? cfg.thuTu : 999 };
+    });
     allCourses.sort((a,b) => a.thuTu - b.thuTu);
-    // Gán lại thuTu tuần tự nếu chưa có
-    allCourses.forEach((c,i) => { if(c.thuTu === 999) c.thuTu = i+1; });
+    // Gán lại thuTu tuần tự cho khoá chưa có
+    let seq = 1;
+    allCourses.forEach(c => { if(c.thuTu === 999) c.thuTu = seq; else seq = c.thuTu + 1; });
     const idx = allCourses.findIndex(c => c.fullName === fullName);
     if(idx < 0) return;
     const swapIdx = idx + dir;
@@ -1474,7 +1486,6 @@ async function moveCourseOrder(fullName, dir){
     const tmpThu = allCourses[idx].thuTu;
     allCourses[idx].thuTu = allCourses[swapIdx].thuTu;
     allCourses[swapIdx].thuTu = tmpThu;
-    // Lưu 2 khoá đổi chỗ
     await Promise.all([
         saveKhoaConfigField(allCourses[idx].fullName, 'thuTu', allCourses[idx].thuTu),
         saveKhoaConfigField(allCourses[swapIdx].fullName, 'thuTu', allCourses[swapIdx].thuTu)
@@ -1643,7 +1654,11 @@ function renderLessonList(){
     }
     let html='';
     Object.values(subjects).forEach(subj=>{
-        const allCourses = Object.values(subj.courses);
+        const allCourses = Object.values(subj.courses).sort((a,b)=>{
+            const ta = ADMIN_KHOACONFIG[a.fullName]?.thuTu ?? 999;
+            const tb = ADMIN_KHOACONFIG[b.fullName]?.thuTu ?? 999;
+            return ta - tb;
+        });
         const totalLessons = allCourses.reduce((s,co)=>s+Object.values(co.chapters).reduce((s2,arr)=>s2+arr.length,0),0);
         // Subject header
         html+=`<div class="subject-header">
@@ -3053,3 +3068,106 @@ function initLiveControl() {
             // Điền lại form nếu đang live
             if (cfg.title) document.getElementById('lc-title').value = cfg.title;
           
+            if (cfg.videoId) document.getElementById('lc-videoid').value = cfg.videoId;
+        });
+    } catch(e) {
+        document.getElementById('lc-status-chip').textContent = '🔴 Lỗi Firebase';
+        document.getElementById('lc-status-chip').style.background = '#fee2e2';
+        document.getElementById('lc-status-chip').style.color = '#b91c1c';
+        console.error('[LC Firebase]', e);
+    }
+}
+
+function lcSubscribeSession(sid) {
+    if (!lcDb) return;
+    const path = 'live_sessions/' + sid;
+
+    // Bình luận
+    if (lcMsgListener) lcDb.ref('live_sessions/' + (lcSessionId||'main') + '/messages').off();
+    lcMsgCount = 0;
+    document.getElementById('lc-msg-list').innerHTML = '<div style="text-align:center;color:var(--gray2);font-size:13px;padding:20px">Đang tải…</div>';
+    document.getElementById('lc-msgcount').textContent = '0';
+
+    lcDb.ref(path + '/messages').limitToLast(200).on('child_added', snap => {
+        const d = snap.val();
+        if (!d) return;
+        const list = document.getElementById('lc-msg-list');
+        if (lcMsgCount === 0) list.innerHTML = '';
+        lcMsgCount++;
+        document.getElementById('lc-msgcount').textContent = lcMsgCount;
+        const color = lcColorForName(d.name || 'HS');
+        const el = document.createElement('div');
+        el.style.cssText = 'display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--border)';
+        el.innerHTML =
+            '<div style="width:30px;height:30px;border-radius:50%;flex-shrink:0;background:' + color + ';color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center">' + lcInitials(d.name||'HS') + '</div>' +
+            '<div style="flex:1;min-width:0">' +
+            '<div style="font-size:11px;font-weight:700;color:' + color + ';margin-bottom:2px">' + lcEsc(d.name||'Học sinh') + '</div>' +
+            '<div style="font-size:13px;word-break:break-word">' + lcEsc(d.text||'') + '</div>' +
+            '<div style="font-size:10px;color:var(--gray2);margin-top:2px">' + lcFmtTime(d.ts) + '</div>' +
+            '</div>';
+        list.appendChild(el);
+        list.scrollTop = list.scrollHeight;
+    });
+
+    // Mắt xem
+    if (lcViewerListener) lcDb.ref('live_sessions/' + (lcSessionId||'main') + '/viewers').off();
+    lcDb.ref(path + '/viewers').on('value', snap => {
+        document.getElementById('lc-viewers').textContent = snap.numChildren();
+    });
+
+    // Tim
+    if (lcHeartListener) lcDb.ref('live_sessions/' + (lcSessionId||'main') + '/hearts').off();
+    lcDb.ref(path + '/hearts').on('value', snap => {
+        document.getElementById('lc-hearts').textContent = snap.val() || 0;
+    });
+}
+
+function lcStartLive() {
+    if (!lcDb) { alert('Firebase chưa kết nối!'); return; }
+    const title = document.getElementById('lc-title').value.trim();
+    const rawId = document.getElementById('lc-videoid').value.trim();
+    // Trích videoId từ link YouTube hoặc dùng trực tiếp
+    const videoId = (function(u){ if(!u) return ''; if(/^[A-Za-z0-9_-]{11}$/.test(u)) return u; const m=u.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([A-Za-z0-9_-]{11})/); return m?m[1]:''; })(rawId);
+    if (!title) { alert('Nhập tiêu đề buổi live!'); return; }
+    if (!videoId) { alert('Nhập YouTube Video ID hợp lệ (11 ký tự)!'); return; }
+
+    const newSessionId = 'session_' + Date.now();
+    lcDb.ref('live_config/current').set({
+        isLive: true,
+        title: title,
+        videoId: videoId,
+        sessionId: newSessionId,
+        startedAt: Date.now()
+    }).then(() => toast('🔴 Đã bắt đầu live! Session: ' + newSessionId, 'ok'))
+      .catch(e => toast('Lỗi: ' + e.message, 'err'));
+}
+
+function lcStopLive() {
+    if (!lcDb) { alert('Firebase chưa kết nối!'); return; }
+    if (!confirm('Kết thúc buổi live?')) return;
+    lcDb.ref('live_config/current').update({ isLive: false, videoId: '' })
+        .then(() => toast('⏹ Đã kết thúc live.', 'ok'))
+        .catch(e => toast('Lỗi: ' + e.message, 'err'));
+}
+
+function lcClearMessages() {
+    if (!lcDb || !lcSessionId) return;
+    if (!confirm('Xóa toàn bộ bình luận của session này?')) return;
+    lcDb.ref('live_sessions/' + lcSessionId + '/messages').remove()
+        .then(() => {
+            document.getElementById('lc-msg-list').innerHTML = '<div style="text-align:center;color:var(--gray2);font-size:13px;padding:20px">Đã xóa tất cả bình luận</div>';
+            lcMsgCount = 0;
+            document.getElementById('lc-msgcount').textContent = '0';
+            toast('Đã xóa bình luận.', 'ok');
+        })
+        .catch(e => toast('Lỗi: ' + e.message, 'err'));
+}
+
+function lcEsc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function lcColorForName(n){ const C=['#e53e3e','#dd6b20','#d69e2e','#38a169','#3182ce','#6b46c1','#d53f8c']; let h=0; for(let i=0;i<n.length;i++) h=(h*31+n.charCodeAt(i))>>>0; return C[h%C.length]; }
+function lcInitials(n){ return n.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2); }
+function lcFmtTime(ts){ if(!ts) return ''; const d=new Date(ts); return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0'); }
+</script>
+
+</body>
+</html>
