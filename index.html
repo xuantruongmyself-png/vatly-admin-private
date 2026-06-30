@@ -152,6 +152,13 @@
         .course-action-bar { display:flex; gap:6px; align-items:center; padding:4px 20px 10px; border-bottom:1px solid var(--border); }
         .course-action-btn { display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:600; padding:4px 12px; border-radius:8px; cursor:pointer; border:1px solid; font-family:inherit; transition:all .15s; }
         .course-action-btn.edit { background:rgba(11,132,243,.07); color:var(--blue); border-color:rgba(11,132,243,.25); }
+        .course-action-btn.toggle-hide { background:rgba(245,158,11,.07); color:#d97706; border-color:rgba(245,158,11,.3); }
+        .course-action-btn.toggle-hide.is-hidden { background:rgba(239,68,68,.07); color:#ef4444; border-color:rgba(239,68,68,.3); }
+        .course-action-btn.toggle-khaigiang { background:rgba(22,163,74,.07); color:#16a34a; border-color:rgba(22,163,74,.3); }
+        .course-action-btn.toggle-khaigiang.not-started { background:rgba(107,114,128,.07); color:var(--gray); border-color:var(--border); }
+        .course-action-btn.order-btn { background:rgba(107,114,128,.07); color:var(--gray); border-color:var(--border); padding:4px 9px; }
+        .course-action-btn.order-btn:hover { border-color:var(--blue); color:var(--blue); }
+        .course-order-badge { display:inline-flex; align-items:center; justify-content:center; background:var(--bg3); color:var(--gray); border:1px solid var(--border); border-radius:6px; font-size:11px; font-weight:700; min-width:24px; height:22px; padding:0 6px; margin-left:2px; }
         .course-action-btn.edit:hover { background:rgba(11,132,243,.15); }
         .course-action-btn.del { background:rgba(239,68,68,.07); color:#ef4444; border-color:rgba(239,68,68,.25); }
         .course-action-btn.del:hover { background:rgba(239,68,68,.15); }
@@ -1090,7 +1097,7 @@ function aFresh(c){ return c && (Date.now()-c.t < ADMIN_CACHE_TTL); }
 /* ════════════════════════════════════
    KHOÁ GHI: tự gắn mật khẩu admin vào mọi thao tác ghi
 ════════════════════════════════════ */
-const ADMIN_WRITE_ACTIONS = ['savebaihoc','deletebaihoc','savequestions','savenganhang','deletenganhang','updatenganhang','updatebaihocvideo','saveexam','deleteexam','savelivesession','deletelivesession','setvipstatus'];
+const ADMIN_WRITE_ACTIONS = ['savebaihoc','deletebaihoc','savequestions','savenganhang','deletenganhang','updatenganhang','updatebaihocvideo','saveexam','deleteexam','savelivesession','deletelivesession','setvipstatus','savekhoaconfig'];
 function getAdminKey(){ return localStorage.getItem('adminKey') || ''; }
 (function(){
     const _fetch = window.fetch.bind(window);
@@ -1163,7 +1170,7 @@ function todayStr(){ return new Date().toLocaleDateString('vi-VN'); }
 /* ════════════════════════════════════
    INIT
 ════════════════════════════════════ */
-function initAdmin(){ loadSettings().then(()=>loadLessons()); }
+function initAdmin(){ Promise.all([loadSettings(), loadKhoaConfig()]).then(()=>loadLessons()); }
 
 /* ════════════════════════════════════
    TAB 5: LỊCH LIVE
@@ -1371,6 +1378,40 @@ async function confirmDeleteLive(){
 let allLessons = [];
 let currentFilter = 'all';
 let currentTeachingLesson = ''; // key "KhoaHoc|||Chuong|||TenBai" của bài thầy đang dạy
+let ADMIN_KHOACONFIG = {}; // { fullCourseName: { hienThi, thuTu, daKhaiGiang, loaiTK } }
+
+async function loadKhoaConfig(){
+    try{
+        const r = await fetch(DB_URL + '?type=khoaconfig&t=' + Date.now());
+        const d = await r.json();
+        ADMIN_KHOACONFIG = {};
+        (Array.isArray(d) ? d : (d.data || [])).forEach(c => {
+            ADMIN_KHOACONFIG[c.khoaHoc] = {
+                hienThi: c.hienThi !== 'false' && c.hienThi !== false,
+                thuTu: (c.thuTu !== undefined && c.thuTu !== '') ? Number(c.thuTu) : 999,
+                daKhaiGiang: c.daKhaiGiang === true || c.daKhaiGiang === 'true',
+                loaiTK: c.loaiTK || 'free,vip,premium'
+            };
+        });
+    }catch(e){ console.warn('loadKhoaConfig lỗi:', e); }
+}
+
+async function saveKhoaConfigField(fullName, field, value){
+    try{
+        const r = await fetch(DB_URL, { method:'POST', body: JSON.stringify({
+            action: 'savekhoaconfig',
+            adminKey: getAdminKey(),
+            khoaHoc: fullName,
+            field: field,
+            value: value
+        })});
+        const d = await r.json();
+        if(!d.ok) throw new Error(d.msg || 'Lỗi');
+        if(!ADMIN_KHOACONFIG[fullName]) ADMIN_KHOACONFIG[fullName] = { hienThi:true, thuTu:999, daKhaiGiang:false, loaiTK:'free,vip,premium' };
+        ADMIN_KHOACONFIG[fullName][field] = value;
+        return true;
+    }catch(e){ toast('Lỗi lưu config: ' + e.message, 'err'); return false; }
+}
 
 async function loadSettings(){
     try{
@@ -1385,22 +1426,60 @@ async function markTeachingLesson(key){
     currentTeachingLesson = (currentTeachingLesson === key) ? '' : key; // toggle
     renderLessonList();
     try{
-        const r = await fetch(DB_URL, { method:'POST', body: JSON.stringify({
+        await fetch(DB_URL, { method:'POST', body: JSON.stringify({
             action: 'savesetting',
-            adminKey: ADMIN_KEY,
+            adminKey: getAdminKey(),
             key: 'currentTeachingLesson',
             value: currentTeachingLesson
         })});
-        const d = await r.json();
-        if(!d.ok){ throw new Error(d.msg || 'GAS error'); }
         toast(currentTeachingLesson
             ? '⭐ Đã đánh dấu bài đang dạy'
             : '☆ Đã bỏ đánh dấu', 'ok');
     }catch(e){
         currentTeachingLesson = prev;
         renderLessonList();
-        toast('Lỗi lưu setting: ' + e.message, 'err');
+        toast('Lỗi lưu setting', 'err');
     }
+}
+
+async function toggleHienThi(fullName){
+    const cur = ADMIN_KHOACONFIG[fullName] || { hienThi:true, thuTu:999, daKhaiGiang:false };
+    const newVal = !cur.hienThi;
+    const ok = await saveKhoaConfigField(fullName, 'hienThi', String(newVal));
+    if(ok){ renderLessonList(); toast(newVal ? '👁 Đã hiện khoá học' : '🙈 Đã ẩn khoá học', 'ok'); }
+}
+
+async function toggleKhaiGiang(fullName){
+    const cur = ADMIN_KHOACONFIG[fullName] || { hienThi:true, thuTu:999, daKhaiGiang:false };
+    const newVal = !cur.daKhaiGiang;
+    const ok = await saveKhoaConfigField(fullName, 'daKhaiGiang', String(newVal));
+    if(ok){ renderLessonList(); toast(newVal ? '🟢 Đã đánh dấu Khai giảng' : '⏸ Đã huỷ Khai giảng', 'ok'); }
+}
+
+async function moveCourseOrder(fullName, dir){
+    // Lấy danh sách tất cả khoá theo thứ tự hiện tại
+    const subjects = groupLessons(allLessons);
+    const allCourses = [];
+    Object.values(subjects).forEach(s => Object.keys(s.courses).forEach(fn => {
+        const cfg = ADMIN_KHOACONFIG[fn] || { thuTu:999 };
+        allCourses.push({ fullName: fn, thuTu: cfg.thuTu });
+    }));
+    allCourses.sort((a,b) => a.thuTu - b.thuTu);
+    // Gán lại thuTu tuần tự nếu chưa có
+    allCourses.forEach((c,i) => { if(c.thuTu === 999) c.thuTu = i+1; });
+    const idx = allCourses.findIndex(c => c.fullName === fullName);
+    if(idx < 0) return;
+    const swapIdx = idx + dir;
+    if(swapIdx < 0 || swapIdx >= allCourses.length) return;
+    const tmpThu = allCourses[idx].thuTu;
+    allCourses[idx].thuTu = allCourses[swapIdx].thuTu;
+    allCourses[swapIdx].thuTu = tmpThu;
+    // Lưu 2 khoá đổi chỗ
+    await Promise.all([
+        saveKhoaConfigField(allCourses[idx].fullName, 'thuTu', allCourses[idx].thuTu),
+        saveKhoaConfigField(allCourses[swapIdx].fullName, 'thuTu', allCourses[swapIdx].thuTu)
+    ]);
+    renderLessonList();
 }
 
 async function loadLessons(){
@@ -1494,6 +1573,7 @@ function updateKhoaOptions(){
 function renderCourseBlock(course){
     const total=Object.values(course.chapters).reduce((s,arr)=>s+arr.length,0);
     const fn=esc(course.fullName).replace(/'/g,"&#39;");
+    const _cfg = ADMIN_KHOACONFIG[course.fullName] || { hienThi:true, thuTu:999, daKhaiGiang:false };
     let html=`<div class="course-block open">
         <div class="course-head" onclick="this.parentElement.classList.toggle('open')">
             <span class="course-emoji">${COURSE_EMOJI[course.fullName]||COURSE_EMOJI[course.name]||'📘'}</span>
@@ -1504,6 +1584,15 @@ function renderCourseBlock(course){
         <div class="course-action-bar">
             <button class="course-action-btn edit" onclick="renameCourse('${fn}')"><i class="fa-solid fa-pen"></i> Đổi tên khóa</button>
             <button class="course-action-btn del" onclick="deleteCourse('${fn}')"><i class="fa-solid fa-trash"></i> Xóa khóa này</button>
+            <button class="course-action-btn toggle-hide ${!_cfg.hienThi?'is-hidden':''}" id="btn-hide-${fn}" onclick="toggleHienThi('${fn}')">
+                <i class="fa-solid ${_cfg.hienThi?'fa-eye':'fa-eye-slash'}"></i> ${_cfg.hienThi?'Đang hiện':'Đang ẩn'}
+            </button>
+            <button class="course-action-btn toggle-khaigiang ${!_cfg.daKhaiGiang?'not-started':''}" id="btn-kg-${fn}" onclick="toggleKhaiGiang('${fn}')">
+                <i class="fa-solid ${_cfg.daKhaiGiang?'fa-circle-play':'fa-clock'}"></i> ${_cfg.daKhaiGiang?'Đã khai giảng':'Chưa khai giảng'}
+            </button>
+            <span class="course-order-badge" title="Thứ tự hiển thị">#${_cfg.thuTu===999?'–':_cfg.thuTu}</span>
+            <button class="course-action-btn order-btn" title="Lên trên" onclick="moveCourseOrder('${fn}',-1)"><i class="fa-solid fa-chevron-up"></i></button>
+            <button class="course-action-btn order-btn" title="Xuống dưới" onclick="moveCourseOrder('${fn}',1)"><i class="fa-solid fa-chevron-down"></i></button>
         </div>
         <div class="chapter-group">`;
     Object.entries(course.chapters).forEach(([chName,lessons])=>{
@@ -2963,110 +3052,4 @@ function initLiveControl() {
             }
             // Điền lại form nếu đang live
             if (cfg.title) document.getElementById('lc-title').value = cfg.title;
-            if (cfg.videoId) document.getElementById('lc-videoid').value = cfg.videoId;
-        });
-    } catch(e) {
-        document.getElementById('lc-status-chip').textContent = '🔴 Lỗi Firebase';
-        document.getElementById('lc-status-chip').style.background = '#fee2e2';
-        document.getElementById('lc-status-chip').style.color = '#b91c1c';
-        console.error('[LC Firebase]', e);
-    }
-}
-
-function lcSubscribeSession(sid) {
-    if (!lcDb) return;
-    const path = 'live_sessions/' + sid;
-
-    // Bình luận
-    if (lcMsgListener) lcDb.ref('live_sessions/' + (lcSessionId||'main') + '/messages').off();
-    lcMsgCount = 0;
-    document.getElementById('lc-msg-list').innerHTML = '<div style="text-align:center;color:var(--gray2);font-size:13px;padding:20px">Đang tải…</div>';
-    document.getElementById('lc-msgcount').textContent = '0';
-
-    lcDb.ref(path + '/messages').limitToLast(200).on('child_added', snap => {
-        const d = snap.val();
-        if (!d) return;
-        const list = document.getElementById('lc-msg-list');
-        if (lcMsgCount === 0) list.innerHTML = '';
-        lcMsgCount++;
-        document.getElementById('lc-msgcount').textContent = lcMsgCount;
-        const color = lcColorForName(d.name || 'HS');
-        const el = document.createElement('div');
-        el.style.cssText = 'display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--border)';
-        el.innerHTML =
-            '<div style="width:30px;height:30px;border-radius:50%;flex-shrink:0;background:' + color + ';color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center">' + lcInitials(d.name||'HS') + '</div>' +
-            '<div style="flex:1;min-width:0">' +
-            '<div style="font-size:11px;font-weight:700;color:' + color + ';margin-bottom:2px">' + lcEsc(d.name||'Học sinh') + '</div>' +
-            '<div style="font-size:13px;word-break:break-word">' + lcEsc(d.text||'') + '</div>' +
-            '<div style="font-size:10px;color:var(--gray2);margin-top:2px">' + lcFmtTime(d.ts) + '</div>' +
-            '</div>';
-        list.appendChild(el);
-        list.scrollTop = list.scrollHeight;
-    });
-
-    // Mắt xem
-    if (lcViewerListener) lcDb.ref('live_sessions/' + (lcSessionId||'main') + '/viewers').off();
-    lcDb.ref(path + '/viewers').on('value', snap => {
-        document.getElementById('lc-viewers').textContent = snap.numChildren();
-    });
-
-    // Tim
-    if (lcHeartListener) lcDb.ref('live_sessions/' + (lcSessionId||'main') + '/hearts').off();
-    lcDb.ref(path + '/hearts').on('value', snap => {
-        document.getElementById('lc-hearts').textContent = snap.val() || 0;
-    });
-}
-
-function lcStartLive() {
-    if (!lcDb) { alert('Firebase chưa kết nối!'); return; }
-    const title = document.getElementById('lc-title').value.trim();
-    const rawId = document.getElementById('lc-videoid').value.trim();
-    // Trích videoId từ link YouTube hoặc dùng trực tiếp
-    const videoId = (function(u){ if(!u) return ''; if(/^[A-Za-z0-9_-]{11}$/.test(u)) return u; const m=u.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([A-Za-z0-9_-]{11})/); return m?m[1]:''; })(rawId);
-    if (!title) { alert('Nhập tiêu đề buổi live!'); return; }
-    if (!videoId) { alert('Nhập YouTube Video ID hợp lệ (11 ký tự)!'); return; }
-
-    const newSessionId = 'session_' + Date.now();
-    lcDb.ref('live_config/current').set({
-        isLive: true,
-        title: title,
-        videoId: videoId,
-        sessionId: newSessionId,
-        startedAt: Date.now()
-    }).then(() => toast('🔴 Đã bắt đầu live! Session: ' + newSessionId, 'ok'))
-      .catch(e => toast('Lỗi: ' + e.message, 'err'));
-}
-
-function lcStopLive() {
-    if (!lcDb) { alert('Firebase chưa kết nối!'); return; }
-    if (!confirm('Kết thúc buổi live?')) return;
-    lcDb.ref('live_config/current').update({ isLive: false, videoId: '' })
-        .then(() => toast('⏹ Đã kết thúc live.', 'ok'))
-        .catch(e => toast('Lỗi: ' + e.message, 'err'));
-}
-
-function lcClearMessages() {
-    if (!lcDb || !lcSessionId) return;
-    if (!confirm('Xóa toàn bộ bình luận của session này?')) return;
-    lcDb.ref('live_sessions/' + lcSessionId + '/messages').remove()
-        .then(() => {
-            document.getElementById('lc-msg-list').innerHTML = '<div style="text-align:center;color:var(--gray2);font-size:13px;padding:20px">Đã xóa tất cả bình luận</div>';
-            lcMsgCount = 0;
-            document.getElementById('lc-msgcount').textContent = '0';
-            toast('Đã xóa bình luận.', 'ok');
-        })
-        .catch(e => toast('Lỗi: ' + e.message, 'err'));
-}
-
-function lcEsc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function lcColorForName(n){ const C=['#e53e3e','#dd6b20','#d69e2e','#38a169','#3182ce','#6b46c1','#d53f8c']; let h=0; for(let i=0;i<n.length;i++) h=(h*31+n.charCodeAt(i))>>>0; return C[h%C.length]; }
-function lcInitials(n){ return n.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2); }
-function lcFmtTime(ts){ if(!ts) return ''; const d=new Date(ts); return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0'); }
-</script>
-
-<script>
-function toggleTheme(){document.body.classList.toggle('dark');localStorage.setItem('vlxt_theme',document.body.classList.contains('dark')?'dark':'light');}
-if(localStorage.getItem('vlxt_theme')==='dark')document.body.classList.add('dark');
-</script>
-</body>
-</html>
+          
