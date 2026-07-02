@@ -578,8 +578,6 @@
     <div class="filter-bar" id="filter-bar">
         <span class="filter-chip active" data-f="all" onclick="filterCourse('all',this)">Tất cả</span>
         <span class="filter-chip" data-f="Vật Lý 12" onclick="filterCourse('Vật Lý 12',this)">⚛️ Vật Lý 12</span>
-        <span class="filter-chip" data-f="Vật Lý 11" onclick="filterCourse('Vật Lý 11',this)">🔌 Vật Lý 11</span>
-        <span class="filter-chip" data-f="Vật Lý 10" onclick="filterCourse('Vật Lý 10',this)">🚀 Vật Lý 10</span>
     </div>
     <!-- JS sẽ thêm filter chips động từ dữ liệu thực tế -->
     <div class="lesson-manager">
@@ -604,8 +602,6 @@
                                 <label>Lớp / Môn <span>*</span></label>
                                 <select id="f-lop" onchange="updateKhoaOptions()">
                                     <option>Vật Lý 12</option>
-                                    <option>Vật Lý 11</option>
-                                    <option>Vật Lý 10</option>
                                 </select>
                             </div>
                             <div class="form-field">
@@ -720,8 +716,6 @@
               <label>Lớp</label>
               <select id="ef-lop">
                 <option value="12">Vật Lý 12</option>
-                <option value="11">Vật Lý 11</option>
-                <option value="10">Vật Lý 10</option>
               </select>
             </div>
           </div>
@@ -928,7 +922,7 @@
                 <div class="form-field"><label>Tên đề <span>*</span></label><input type="text" id="nh-ef-tende" placeholder="vd: Đề ôn tập chương Từ trường"></div>
                 <div class="efd-row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
                     <div class="form-field"><label>Lớp</label>
-                        <select id="nh-ef-lop"><option value="12">Vật Lý 12</option><option value="11">Vật Lý 11</option><option value="10">Vật Lý 10</option></select>
+                        <select id="nh-ef-lop"><option value="12">Vật Lý 12</option></select>
                     </div>
                     <div class="form-field"><label>Trạng thái</label>
                         <select id="nh-ef-trangthai"><option value="khoa">🔒 Khóa (chưa công bố)</option><option value="mo">✅ Mở ngay</option></select>
@@ -1009,8 +1003,6 @@
                 <label class="field-label">Khối lớp</label>
                 <select class="field-input" id="lf-grade">
                     <option value="Vật Lý 12">Vật Lý 12</option>
-                    <option value="Vật Lý 11">Vật Lý 11</option>
-                    <option value="Vật Lý 10">Vật Lý 10</option>
                     <option value="Tất cả">Tất cả khối</option>
                 </select>
             </div>
@@ -1424,7 +1416,7 @@ function toggleTheme(){
 
 async function loadSettings(){
     try{
-        const r = await fetch(DB_URL + '?type=settings');
+        const r = await fetch(DB_URL + '?type=settings&_t=' + Date.now());
         const d = await r.json();
         if(d.ok && d.data) currentTeachingLesson = d.data.currentTeachingLesson || '';
     }catch(e){ console.warn('Không tải được settings:', e); }
@@ -1435,19 +1427,25 @@ async function markTeachingLesson(key){
     currentTeachingLesson = (currentTeachingLesson === key) ? '' : key; // toggle
     renderLessonList();
     try{
-        await fetch(DB_URL, { method:'POST', body: JSON.stringify({
-            action: 'savesetting',
-            adminKey: getAdminKey(),
-            key: 'currentTeachingLesson',
-            value: currentTeachingLesson
-        })});
+        const r = await fetch(DB_URL, {
+            method: 'POST',
+            headers: {'Content-Type': 'text/plain;charset=utf-8'},
+            body: JSON.stringify({
+                action: 'savesetting',
+                adminKey: getAdminKey(),
+                key: 'currentTeachingLesson',
+                value: currentTeachingLesson
+            })
+        });
+        const d = await r.json();
+        if(!d.ok) throw new Error(d.msg || 'GAS lỗi');
         toast(currentTeachingLesson
             ? '⭐ Đã đánh dấu bài đang dạy'
             : '☆ Đã bỏ đánh dấu', 'ok');
     }catch(e){
         currentTeachingLesson = prev;
         renderLessonList();
-        toast('Lỗi lưu setting', 'err');
+        toast('Lỗi lưu bài đang dạy: ' + e.message, 'err');
     }
 }
 
@@ -1550,8 +1548,8 @@ function groupLessons(rows){
     return subjects;
 }
 
-const COURSE_EMOJI = {'Vật Lý 12':'⚛️','Vật Lý 11':'🔌','Vật Lý 10':'🚀'};
-const SUBJECT_EMOJI = {'Vật Lý 12':'⚛️','Vật Lý 11':'🔌','Vật Lý 10':'🚀'};
+const COURSE_EMOJI = {'Vật Lý 12':'⚛️'};
+const SUBJECT_EMOJI = {'Vật Lý 12':'⚛️'};
 
 // Tách "Luyện đề 2k8 - Vật Lý 12" → {subject:'Vật Lý 12', courseName:'Luyện đề 2k8'}
 function extractSC(khoaHoc){
